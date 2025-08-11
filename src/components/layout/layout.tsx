@@ -1,22 +1,29 @@
+import { Link, Outlet } from 'react-router-dom';
+import { AppRoute } from '../../constants/router';
+
 function Layout(): JSX.Element {
   return (
     <div className="wrapper">
       <header className="header" id="header">
         <div className="container">
-          <a className="header__logo" href="index.html" aria-label="Переход на главную">
+          <Link className="header__logo" to={AppRoute.Root} aria-label="Переход на главную">
             <svg width="100" height="36" aria-hidden="true">
               <use xlinkHref="#icon-logo"></use>
             </svg>
-          </a>
+          </Link>
           <nav className="main-nav header__main-nav">
             <ul className="main-nav__list">
-              <li className="main-nav__item"><a className="main-nav__link" href="catalog.html">Каталог</a>
+              <li className="main-nav__item">
+                <Link className="main-nav__link" to={AppRoute.Root}>Каталог</Link>
               </li>
-              <li className="main-nav__item"><a className="main-nav__link" href="#">Гарантии</a>
+              <li className="main-nav__item">
+                <Link className="main-nav__link" to="#">Гарантии</Link>
               </li>
-              <li className="main-nav__item"><a className="main-nav__link" href="#">Доставка</a>
+              <li className="main-nav__item">
+                <Link className="main-nav__link" to="#">Доставка</Link>
               </li>
-              <li className="main-nav__item"><a className="main-nav__link" href="#">О компании</a>
+              <li className="main-nav__item">
+                <Link className="main-nav__link" to="#">О компании</Link>
               </li>
             </ul>
           </nav>
@@ -42,25 +49,26 @@ function Layout(): JSX.Element {
               </svg><span className="visually-hidden">Сбросить поиск</span>
             </button>
           </div>
-          <a className="header__basket-link" href="#">
+          <Link className="header__basket-link" to={AppRoute.Basket}>
             <svg width="16" height="16" aria-hidden="true">
               <use xlinkHref="#icon-basket"></use>
             </svg>
-          </a>
+          </Link>
         </div>
       </header>
 
       <main>
+        <Outlet />
       </main>
 
       <footer className="footer">
         <div className="container">
           <div className="footer__info">
-            <a className="footer__logo" href="index.html" aria-label="Переход на главную">
+            <Link className="footer__logo" to={AppRoute.Root} aria-label="Переход на главную">
               <svg width="100" height="36" aria-hidden="true">
                 <use xlinkHref="#icon-logo-mono"></use>
               </svg>
-            </a>
+            </Link>
             <p className="footer__description">Интернет-магазин фото- и видеотехники</p>
             <ul className="social">
               <li className="social__item">
@@ -91,20 +99,20 @@ function Layout(): JSX.Element {
               <p className="footer__title">Навигация</p>
               <ul className="footer__list">
                 <li className="footer__item">
-                  <a className="link" href="#">Каталог
-                  </a>
+                  <Link className="link" to={AppRoute.Root}>Каталог
+                  </Link>
                 </li>
                 <li className="footer__item">
-                  <a className="link" href="#">Гарантии
-                  </a>
+                  <Link className="link" to="#">Гарантии
+                  </Link>
                 </li>
                 <li className="footer__item">
-                  <a className="link" href="#">Доставка
-                  </a>
+                  <Link className="link" to="#">Доставка
+                  </Link>
                 </li>
                 <li className="footer__item">
-                  <a className="link" href="#">О компании
-                  </a>
+                  <Link className="link" to="#">О компании
+                  </Link>
                 </li>
               </ul>
             </li>

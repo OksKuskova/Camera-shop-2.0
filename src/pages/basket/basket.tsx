@@ -30,7 +30,8 @@ function Basket(): JSX.Element {
             <li className="basket-item">
               <div className="basket-item__img">
                 <picture>
-                  <source type="image/webp" srcSet="img/content/orlenok.webp, img/content/orlenok@2x.webp 2x"><img src="img/content/orlenok.jpg" srcSet="img/content/orlenok@2x.jpg 2x" width="140" height="120" alt="Фотоаппарат «Орлёнок»"></img></source>
+                  <source type="image/webp" srcSet="img/content/orlenok.webp, img/content/orlenok@2x.webp 2x" />
+                  <img src="img/content/orlenok.jpg" srcSet="img/content/orlenok@2x.jpg 2x" width="140" height="120" alt="Фотоаппарат «Орлёнок»" />
                 </picture>
               </div>
               <div className="basket-item__description">
@@ -67,7 +68,8 @@ function Basket(): JSX.Element {
             <li className="basket-item">
               <div className="basket-item__img">
                 <picture>
-                  <source type="image/webp" srcSet="img/content/das-auge.webp, img/content/das-auge@2x.webp 2x"><img src="img/content/das-auge.jpg" srcSet="img/content/das-auge@2x.jpg 2x" width="140" height="120" alt="Ретрокамера «Das Auge IV»"></img></source>
+                  <source type="image/webp" srcSet="img/content/das-auge.webp, img/content/das-auge@2x.webp 2x" />
+                  <img src="img/content/das-auge.jpg" srcSet="img/content/das-auge@2x.jpg 2x" width="140" height="120" alt="Ретрокамера «Das Auge IV»" />
                 </picture>
               </div>
               <div className="basket-item__description">

@@ -1,17 +1,17 @@
 export const CameraType = {
-  collection: 'Коллекционная',
-  snapshot: 'Моментальная',
-  digital: 'Цифровая',
-  film: 'Плёночная',
+  Collection: 'Коллекционная',
+  Snapshot: 'Моментальная',
+  Digital: 'Цифровая',
+  Film: 'Плёночная',
 } as const;
 
 export const CameraCategory = {
-  videocamera: 'Видеокамера',
-  photocamera: 'Фотоаппарат',
+  Videocamera: 'Видеокамера',
+  Photocamera: 'Фотоаппарат',
 } as const;
 
 export const CameraLevel = {
-  zero: 'Нулевой',
-  'non-professional': 'Любительский',
-  professional: 'Профессиональный',
+  Zero: 'Нулевой',
+  NonProfessional: 'Любительский',
+  Professional: 'Профессиональный',
 } as const;

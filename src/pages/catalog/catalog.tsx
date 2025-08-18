@@ -1,4 +1,10 @@
+import ProductCard from '../../components/product-card/product-card';
+import { getCameras } from '../../mocks/cameras';
+import { Camera } from '../../types/camera.types';
+
 function Catalog(): JSX.Element {
+  const Products = getCameras();
+
   return (
     <>
       <div className="banner">
@@ -144,7 +150,10 @@ function Catalog(): JSX.Element {
                   </form>
                 </div> */}
                 <div className="cards catalog__cards">
-                  <div className="product-card">
+                  {
+                    Products.map((product: Camera) => <ProductCard key={product.id} product={product} />)
+                  }
+                  {/* <div className="product-card">
                     <div className="product-card__img">
                       <picture>
                         <source type="image/webp" srcSet="img/content/das-auge.webp, img/content/das-auge@2x.webp 2x" />
@@ -181,7 +190,7 @@ function Catalog(): JSX.Element {
                       <a className="btn btn--transparent" href="#">Подробнее
                       </a>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 {/* <div className="pagination">
                   <ul className="pagination__list">

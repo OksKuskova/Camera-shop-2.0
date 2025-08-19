@@ -1,4 +1,22 @@
-function Product():JSX.Element {
+import ProductImage from "../../components/product-image/product-image";
+
+import { useParams } from "react-router-dom";
+import { getCameraById } from "../../mocks/cameras";
+import NotFound from "../not-found/not-found";
+import { ClassName } from "../../constants/class-name";
+import Rating from "../../components/rating/rating";
+import ProductPrice from "../../components/product-price/product-price";
+
+function Product(): JSX.Element {
+  const { id } = useParams();
+  const currentProduct = getCameraById(Number(id));
+
+  if (!currentProduct) {
+    return <NotFound />
+  }
+
+  const { name, rating, reviewCount, price, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = currentProduct;
+
   return (
     <div className="page-content">
       <div className="breadcrumbs">
@@ -26,34 +44,11 @@ function Product():JSX.Element {
       <div className="page-content__section">
         <section className="product">
           <div className="container">
-            <div className="product__img">
-              <picture>
-                <source type="image/webp" srcSet="img/content/das-auge.webp, img/content/das-auge@2x.webp 2x" />
-                <img src="img/content/das-auge.jpg" srcSet="img/content/das-auge@2x.jpg 2x" width="560" height="480" alt="Ретрокамера Das Auge IV" />
-              </picture>
-            </div>
+            <ProductImage className={ClassName.Product} name={name} previewImg={previewImg} previewImg2x={previewImg2x} previewImgWebp={previewImgWebp} previewImgWebp2x={previewImgWebp2x} />
             <div className="product__content">
-              <h1 className="title title--h3">Ретрокамера «Das Auge IV»</h1>
-              <div className="rate product__rate">
-                <svg width="17" height="16" aria-hidden="true">
-                  <use xlinkHref="#icon-full-star"></use>
-                </svg>
-                <svg width="17" height="16" aria-hidden="true">
-                  <use xlinkHref="#icon-full-star"></use>
-                </svg>
-                <svg width="17" height="16" aria-hidden="true">
-                  <use xlinkHref="#icon-full-star"></use>
-                </svg>
-                <svg width="17" height="16" aria-hidden="true">
-                  <use xlinkHref="#icon-full-star"></use>
-                </svg>
-                <svg width="17" height="16" aria-hidden="true">
-                  <use xlinkHref="#icon-star"></use>
-                </svg>
-                <p className="visually-hidden">Рейтинг: 4</p>
-                <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>12</p>
-              </div>
-              <p className="product__price"><span className="visually-hidden">Цена:</span>73 450 ₽</p>
+              <h1 className="title title--h3">{name}</h1>
+              <Rating className={ClassName.Product} rating={rating} reviewCount={reviewCount} />
+              <ProductPrice className={ClassName.Product} price={price} />
               <button className="btn btn--purple" type="button">
                 <svg width="24" height="16" aria-hidden="true">
                   <use xlinkHref="#icon-add-basket"></use>

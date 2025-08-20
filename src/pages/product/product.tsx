@@ -6,6 +6,7 @@ import NotFound from "../not-found/not-found";
 import { ClassName } from "../../constants/class-name";
 import Rating from "../../components/rating/rating";
 import ProductPrice from "../../components/product-price/product-price";
+import Tabs from "../../components/tabs/tabs";
 
 function Product(): JSX.Element {
   const { id } = useParams();
@@ -15,7 +16,7 @@ function Product(): JSX.Element {
     return <NotFound />
   }
 
-  const { name, rating, reviewCount, price, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = currentProduct;
+  const { name, rating, reviewCount, price, vendorCode, type, category, level, description, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = currentProduct;
 
   return (
     <div className="page-content">
@@ -54,7 +55,8 @@ function Product(): JSX.Element {
                   <use xlinkHref="#icon-add-basket"></use>
                 </svg>Добавить в корзину
               </button>
-              <div className="tabs product__tabs">
+              <Tabs vendorCode={vendorCode} type={type} category={category} level={level} description={description} />
+              {/* <div className="tabs product__tabs">
                 <div className="tabs__controls product__tabs-controls">
                   <button className="tabs__control" type="button">Характеристики</button>
                   <button className="tabs__control is-active" type="button">Описание</button>
@@ -83,7 +85,7 @@ function Product(): JSX.Element {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>

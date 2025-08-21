@@ -1,3 +1,4 @@
+import { ClassName } from '../../constants/class-name';
 import { Camera } from '../../types/camera.types';
 import { ClassNameValue } from '../../types/class-name.type';
 import RatingStar from './rating-star';
@@ -11,7 +12,7 @@ function Rating({ className, rating, reviewCount }: RatingProps): JSX.Element {
   return (
     <div className={`rate ${className}__rate`}>
       {Array.from({ length: RATING_LENGTH }, (_, i) => <RatingStar key={i} starLink={i < rating ? StarLink.Full : StarLink.Empty} />)}
-      <p className="visually-hidden">{`Рейтинг: ${rating}`}</p>
+      <p className="visually-hidden">{`${className === ClassName.Review ? 'Оценка' : 'Рейтинг'}: ${rating}`}</p>
       {reviewCount !== undefined && (
         <p className="rate__count">
           <span className="visually-hidden">Всего оценок:</span>{reviewCount}

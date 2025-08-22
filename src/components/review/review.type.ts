@@ -1,3 +1,5 @@
+import { DateFormat, ReviewCardList } from "./review-card.const";
+
 export type Review = {
   id: string;
   createAt: string;
@@ -8,3 +10,9 @@ export type Review = {
   review: string;
   rating: number;
 }
+
+export type ReviewCardListKeys = keyof typeof ReviewCardList;
+export type ReviewCardListValue = typeof ReviewCardList[ReviewCardListKeys];
+
+export type DateFormatKeys = keyof typeof DateFormat;
+export type DateFormatValues = typeof DateFormat[DateFormatKeys];

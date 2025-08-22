@@ -4,7 +4,7 @@ import { Review } from "./review.type";
 
 import ReviewCard from "./review-card";
 import { VisibleReviews } from "./review.const";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type ReviewBlockProps = Pick<Review, 'cameraId'>
 
@@ -14,7 +14,20 @@ function ReviewBlock({ cameraId }: ReviewBlockProps): JSX.Element {
   const reviews = getReviewsById(cameraId);
   const sortedReviews = useMemo(() => sortReviewsByDate(reviews), [reviews]);
 
-  const [visibleReviewsCount, setVisibleReviewsCount] = useState<number>(DEFAULT_COUNT)
+  const [visibleReviewsCount, setVisibleReviewsCount] = useState<number>(DEFAULT_COUNT);
+
+  console.log('visibleReviewsCount:', visibleReviewsCount);
+
+  const lastReviewRef = useRef<HTMLLIElement | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setVisibleReviewsCount((prevCounter) => Math.min(prevCounter + STEP_COUNT, sortedReviews.length))
+    }, { root: null, rootMargin: '0px', threshold: 1, });
+    if (lastReviewRef.current) observer.observe(lastReviewRef.current);
+
+    return () => observer.disconnect();
+  }, [lastReviewRef, visibleReviewsCount]);
 
   return (
     <section className="review-block">
@@ -24,7 +37,7 @@ function ReviewBlock({ cameraId }: ReviewBlockProps): JSX.Element {
           <button className="btn" type="button">Оставить свой отзыв</button>
         </div>
         <ul className="review-block__list">
-          {sortedReviews.slice(0, visibleReviewsCount).map((review) => <ReviewCard key={review.id} {...review} />)}
+          {sortedReviews.slice(0, visibleReviewsCount).map((review, index) => <ReviewCard key={review.id} {...review} elementRef={index === visibleReviewsCount - 1 ? lastReviewRef : undefined} />)}
         </ul>
         {
           visibleReviewsCount < sortedReviews.length && (

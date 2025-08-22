@@ -5,16 +5,19 @@ import { DateFormatKeys, DateFormatValues, Review, ReviewCardListKeys } from "./
 
 import Rating from "../rating/rating";
 import ReviewCardListItem from "./review-card-list-item";
+import { Ref } from "react";
 
-type ReviewCardProps = Review;
+type ReviewCardProps = Review & {
+  elementRef?: Ref<HTMLLIElement>;
+};
 
-function ReviewCard({ userName, createAt, rating, advantage, disadvantage, review }: ReviewCardProps): JSX.Element {
+function ReviewCard({ userName, createAt, rating, advantage, disadvantage, review, elementRef }: ReviewCardProps): JSX.Element {
   const data: Record<ReviewCardListKeys, string> = { advantage, disadvantage, review };
 
   const { DayMonth, YearMonthDay } = (Object.fromEntries((Object.entries(DateFormat) as [DateFormatKeys, DateFormatValues][]).map(([key, value]) => [key, humanizeDate(createAt, value)]))) as Record<DateFormatKeys, string>;
 
   return (
-    <li className="review-card">
+    <li className="review-card" ref={elementRef || undefined}>
       <div className="review-card__head">
         <p className="title title--h4">{userName}</p>
         <time className="review-card__data" dateTime={YearMonthDay}>{DayMonth}</time>
@@ -23,7 +26,7 @@ function ReviewCard({ userName, createAt, rating, advantage, disadvantage, revie
       <ul className="review-card__list">
         {(Object.keys(ReviewCardList) as ReviewCardListKeys[]).map((key) => <ReviewCardListItem key={key} value={ReviewCardList[key]} data={data[key]} />)}
       </ul>
-    </li>
+    </li >
   )
 }
 

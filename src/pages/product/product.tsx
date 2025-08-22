@@ -1,21 +1,17 @@
 import { useParams } from "react-router-dom";
 import { getCameraById } from "../../mocks/cameras";
 import { ClassName } from "../../constants/class-name";
-import { getReviewsById } from "../../mocks/reviews";
-import { sortReviewsByDate } from "../../components/review/review-card.utils";
 
 import ProductImage from "../../components/product-image/product-image";
 import NotFound from "../not-found/not-found";
 import Rating from "../../components/rating/rating";
 import ProductPrice from "../../components/product-price/product-price";
 import Tabs from "../../components/tabs/tabs";
-import ReviewCard from "../../components/review/review-card";
+import ReviewBlock from "../../components/review/review-block";
 
 function Product(): JSX.Element {
   const { id } = useParams();
   const currentProduct = getCameraById(Number(id));
-  const reviews = getReviewsById(Number(id));
-  console.log(reviews);
 
   if (!currentProduct) {
     return <NotFound />
@@ -277,7 +273,8 @@ function Product(): JSX.Element {
         </section>
       </div>
       <div className="page-content__section">
-        <section className="review-block">
+        <ReviewBlock cameraId={Number(id)}
+          {/* <section className="review-block">
           <div className="container">
             <div className="page-content__headed">
               <h2 className="title title--h3">Отзывы</h2>
@@ -291,7 +288,7 @@ function Product(): JSX.Element {
               </button>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
     </div>
   );

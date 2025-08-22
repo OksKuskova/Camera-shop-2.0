@@ -1,6 +1,6 @@
 import { ClassName } from "../../constants/class-name";
-import { DateFormat, ReviewCardList } from "./review-card.const";
-import { humanizeDate } from "./review-card.utils";
+import { DateFormat, ReviewCardList } from "./review.const";
+import { humanizeDate } from "./review.utils";
 import { DateFormatKeys, DateFormatValues, Review, ReviewCardListKeys } from "./review.type";
 
 import Rating from "../rating/rating";

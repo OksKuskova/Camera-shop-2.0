@@ -3,11 +3,18 @@ import { sortReviewsByDate } from "./review.utils";
 import { Review } from "./review.type";
 
 import ReviewCard from "./review-card";
+import { VisibleReviews } from "./review.const";
+import { useMemo, useState } from "react";
 
 type ReviewBlockProps = Pick<Review, 'cameraId'>
 
 function ReviewBlock({ cameraId }: ReviewBlockProps): JSX.Element {
+  const { DEFAULT_COUNT, STEP_COUNT } = VisibleReviews;
+
   const reviews = getReviewsById(cameraId);
+  const sortedReviews = useMemo(() => sortReviewsByDate(reviews), [reviews]);
+
+  const [visibleReviewsCount, setVisibleReviewsCount] = useState<number>(DEFAULT_COUNT)
 
   return (
     <section className="review-block">
@@ -17,12 +24,15 @@ function ReviewBlock({ cameraId }: ReviewBlockProps): JSX.Element {
           <button className="btn" type="button">Оставить свой отзыв</button>
         </div>
         <ul className="review-block__list">
-          {sortReviewsByDate(reviews).map((review) => <ReviewCard key={review.id} {...review} />)}
+          {sortedReviews.slice(0, visibleReviewsCount).map((review) => <ReviewCard key={review.id} {...review} />)}
         </ul>
-        <div className="review-block__buttons">
-          <button className="btn btn--purple" type="button">Показать больше отзывов
-          </button>
-        </div>
+        {
+          visibleReviewsCount < sortedReviews.length && (
+            <div className="review-block__buttons">
+              <button className="btn btn--purple" type="button" onClick={() => setVisibleReviewsCount((prevCounter) => Math.min(prevCounter + STEP_COUNT, sortedReviews.length))}>Показать больше отзывов</button>
+            </div>
+          )
+        }
       </div>
     </section>
   )

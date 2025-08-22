@@ -273,22 +273,7 @@ function Product(): JSX.Element {
         </section>
       </div>
       <div className="page-content__section">
-        <ReviewBlock cameraId={Number(id)}
-          {/* <section className="review-block">
-          <div className="container">
-            <div className="page-content__headed">
-              <h2 className="title title--h3">Отзывы</h2>
-              <button className="btn" type="button">Оставить свой отзыв</button>
-            </div>
-            <ul className="review-block__list">
-              {sortReviewsByDate(reviews).map((review) => <ReviewCard key={review.id} {...review} />)}
-            </ul>
-            <div className="review-block__buttons">
-              <button className="btn btn--purple" type="button">Показать больше отзывов
-              </button>
-            </div>
-          </div>
-        </section> */}
+        <ReviewBlock cameraId={Number(id)} />
       </div>
     </div>
   );

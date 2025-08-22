@@ -8,3 +8,8 @@ export const DateFormat = {
   DayMonth: 'DD MMMM',
   YearMonthDay: 'YYYY-MM-DD',
 } as const;
+
+export const VisibleReviews = {
+  DEFAULT_COUNT: 3,
+  STEP_COUNT: 3,
+};

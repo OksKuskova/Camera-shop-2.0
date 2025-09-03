@@ -5,6 +5,7 @@ import { Review } from "./review.type";
 import { VisibleReviews } from "./review.const";
 
 import ReviewCard from "./review-card";
+import ReviewCardListEmpty from "./review-card-list-empty";
 
 type ReviewBlockProps = Pick<Review, 'cameraId'>
 
@@ -67,16 +68,18 @@ function ReviewBlock({ cameraId }: ReviewBlockProps): JSX.Element {
           <h2 className="title title--h3">Отзывы</h2>
           <button className="btn" type="button">Оставить свой отзыв</button>
         </div>
-        <ul className="review-block__list">
-          {sortedReviews.slice(0, visibleReviewsCount).map((review, index) => <ReviewCard key={review.id} {...review} ref={autoLoadEnabled && index === visibleReviewsCount - 1 ? lastReviewRef : null} />)}
-        </ul>
-        {
-          !autoLoadEnabled && visibleReviewsCount < sortedReviews.length && (
-            <div className="review-block__buttons">
-              <button className="btn btn--purple" type="button" onClick={handleShowMoreRevewClick}>Показать больше отзывов</button>
-            </div>
-          )
-        }
+        {sortedReviews.length ? (
+          <>
+            <ul className="review-block__list">
+              {sortedReviews.slice(0, visibleReviewsCount).map((review, index) => <ReviewCard key={review.id} {...review} ref={autoLoadEnabled && index === visibleReviewsCount - 1 ? lastReviewRef : null} />)}
+            </ul>
+            {!autoLoadEnabled && visibleReviewsCount < sortedReviews.length && (
+              <div className="review-block__buttons">
+                <button className="btn btn--purple" type="button" onClick={handleShowMoreRevewClick}>Показать больше отзывов</button>
+              </div>
+            )}
+          </>
+        ) : <ReviewCardListEmpty />}
       </div>
     </section>
   )

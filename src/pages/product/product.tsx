@@ -46,7 +46,9 @@ function Product(): JSX.Element {
       <div className="page-content__section">
         <section className="product">
           <div className="container">
-            <ProductImage className={ClassName.Product} name={name} previewImg={previewImg} previewImg2x={previewImg2x} previewImgWebp={previewImgWebp} previewImgWebp2x={previewImgWebp2x} />
+            <div className="product-img">
+              <ProductImage className={ClassName.Product} name={name} previewImg={previewImg} previewImg2x={previewImg2x} previewImgWebp={previewImgWebp} previewImgWebp2x={previewImgWebp2x} />
+            </div>
             <div className="product__content">
               <h1 className="title title--h3">{name}</h1>
               <Rating className={ClassName.Product} rating={rating} reviewCount={reviewCount} />

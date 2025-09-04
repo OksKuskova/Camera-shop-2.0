@@ -16,7 +16,9 @@ function ProductCard({ product }: ProductTypeProps): JSX.Element {
 
   return (
     <div className="product-card">
-      <ProductImage className={ClassName.ProductCard} name={name} previewImg={previewImg} previewImg2x={previewImg2x} previewImgWebp={previewImgWebp} previewImgWebp2x={previewImgWebp2x} />
+      <div className="product-card__img">
+        <ProductImage className={ClassName.ProductCard} name={name} previewImg={previewImg} previewImg2x={previewImg2x} previewImgWebp={previewImgWebp} previewImgWebp2x={previewImgWebp2x} />
+      </div>
       <div className="product-card__info">
         <Rating className={ClassName.ProductCard} rating={rating} reviewCount={reviewCount} />
         <ProductTitle className={ClassName.ProductCard} name={name} />

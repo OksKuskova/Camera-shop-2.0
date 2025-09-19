@@ -1,0 +1,25 @@
+.product-similar .product-similar__slider .product-card {
+  display: flex;
+  width: 100%;
+}
+
+.product-similar__slider .swiper {
+  position: relative;
+  max-width: 936px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.slider-controls {
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.slider-controls svg,
+.slider-controls use {
+  pointer-events: none;
+}
+
+.swiper-slide {
+  user-select: none;
+}

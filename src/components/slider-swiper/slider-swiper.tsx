@@ -1,4 +1,5 @@
 import 'swiper/css/bundle';
+import './slider-swiper.style/product-similar-slider.style.css';
 
 import { ReactNode } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';

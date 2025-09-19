@@ -1,7 +1,10 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { AppRoute } from '../../constants/router';
+import PromoBannerSlider from '../promo-banner/promo-banner-slider';
 
 function Layout(): JSX.Element {
+  const { pathname } = useLocation();
+
   return (
     <div className="wrapper">
       <header className="header" id="header">
@@ -58,6 +61,8 @@ function Layout(): JSX.Element {
       </header>
 
       <main>
+        {pathname === AppRoute.Root && <PromoBannerSlider />}
+
         <Outlet />
       </main>
 

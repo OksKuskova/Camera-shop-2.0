@@ -1,0 +1,24 @@
+.banner-slider .swiper-pagination {
+  display: flex;
+  justify-content: end;
+  gap: 12px;
+  max-width: 1280px;
+  padding: 0 40px;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.banner-slider .swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
+  margin: 0;
+}
+
+.banner-slider .swiper-pagination-bullet {
+  width: 16px;
+  height: 16px;
+  background-color: #F4F4FC;
+}
+
+.banner-slider .swiper-pagination-bullet-active {
+  background-color: #7575E2;
+}

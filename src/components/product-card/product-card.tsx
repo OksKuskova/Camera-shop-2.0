@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { ClassName } from '../../constants/class-name';
 import { Camera } from '../../types/camera.types';
-import { getRoute } from './product-card.utils';
+import { getRoute } from '../../utils/utils.router';
+
 import ProductImage from '../product-image/product-image';
 import ProductPrice from '../product-price/product-price';
 import ProductTitle from '../product-title/product-title';

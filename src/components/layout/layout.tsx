@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { AppRoute } from '../../constants/router';
 import PromoBannerSlider from '../promo-banner/promo-banner-slider';
+import FormSearch from '../form-search/form-search';
 
 function Layout(): JSX.Element {
   const { pathname } = useLocation();
@@ -30,7 +31,8 @@ function Layout(): JSX.Element {
               </li>
             </ul>
           </nav>
-          <div className="form-search">
+          <FormSearch />
+          {/* <div className="form-search">
             <form>
               <label>
                 <svg className="form-search__icon" width="16" height="16" aria-hidden="true">
@@ -51,7 +53,7 @@ function Layout(): JSX.Element {
                 <use xlinkHref="#icon-close"></use>
               </svg><span className="visually-hidden">Сбросить поиск</span>
             </button>
-          </div>
+          </div> */}
           <Link className="header__basket-link" to={AppRoute.Basket}>
             <svg width="16" height="16" aria-hidden="true">
               <use xlinkHref="#icon-basket"></use>

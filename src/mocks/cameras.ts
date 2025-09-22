@@ -644,4 +644,5 @@ const Cameras: Camera[] = [
 ];
 
 export const getCameras = (): Camera[] => Cameras;
-export const getCameraById = (id: number): Camera | undefined => Cameras.find((Camera) => Camera.id === id)
+export const getCameraById = (id: number): Camera | undefined => Cameras.find((camera) => camera.id === id);
+export const getCamerasByName = (name: string): Camera[] => Cameras.filter((camera) => camera.name.toLowerCase().includes(name.toLowerCase()));

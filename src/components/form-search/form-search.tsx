@@ -1,24 +1,27 @@
 import './form-search.style.css';
 
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
-import { Camera } from "../../types/camera.types";
+import { ChangeEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
 import { getCamerasByName } from "../../mocks/cameras";
 import { INDEX_DEFAULT, MIN_SEARCH_QUERY_LENGTH } from "./form-search.const";
-import { useNavigate } from 'react-router-dom';
-import { getRoute } from '../../utils/utils.router';
 import useArrayRefs from '../../hooks/use-array-refs';
+import { Keys } from '../../constants/keyboard-keys.const';
+import FormSearchResults from './form-search-results';
 
 function FormSearch(): JSX.Element {
-  const navigate = useNavigate();
-
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<Camera[]>([]); // ! Думаю можно убрать state, используя useMemo, если не понадобится API
   const [focusedElementIndex, setFocusedElementIndex] = useState<number>(INDEX_DEFAULT);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const [itemRefs, setItemRef] = useArrayRefs<HTMLLIElement>();
+
+  const { ARROW_DOWN, ARROW_UP, TAB, ENTER } = Keys;
+
+  const searchResults = useMemo(
+    () => searchQuery.length >= MIN_SEARCH_QUERY_LENGTH ? getCamerasByName(searchQuery) : []
+    , [searchQuery]
+  );
 
   useEffect(() => {
     if (focusedElementIndex === -1) {
@@ -33,49 +36,36 @@ function FormSearch(): JSX.Element {
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const query = evt.target.value;
     setSearchQuery(query);
+  }
 
-    if (query.length >= MIN_SEARCH_QUERY_LENGTH) {
-      const filteredCameras = getCamerasByName(query);
-      setSearchResults(filteredCameras);
-    } else {
-      setSearchResults([]);
-    }
+  const handleTab = (isShiftKey: boolean) => {
+    isShiftKey
+      ? setFocusedElementIndex((prev) => Math.max(prev - 1, INDEX_DEFAULT))
+      : setFocusedElementIndex((prev) => Math.min(prev + 1, searchResults.length));
   }
 
   const handleKeyDown = (evt: KeyboardEvent<HTMLFormElement>) => {
     const key = evt.key;
 
     if (searchResults.length) {
-      if (key === 'ArrowDown') {
+      if (key === ARROW_DOWN) {
         evt.preventDefault();
         setFocusedElementIndex((prev) => Math.min(prev + 1, searchResults.length - 1));
       }
 
-      if (key === 'ArrowUp') {
+      if (key === ARROW_UP) {
         evt.preventDefault();
         setFocusedElementIndex((prev) => Math.max(prev - 1, 0));
       }
 
-      if (key === 'Tab' && !evt.shiftKey) {
+      if (key === TAB) {
         evt.preventDefault();
-        setFocusedElementIndex((prev) => Math.min(prev + 1, searchResults.length));
+        handleTab(evt.shiftKey)
       }
 
-      if (key === 'Tab' && evt.shiftKey) {
+      if (key === ENTER) {
         evt.preventDefault();
-        setFocusedElementIndex((prev) => Math.max(prev - 1, INDEX_DEFAULT));
       }
-    }
-
-    if (key === 'Enter') {
-      evt.preventDefault();
-    }
-  }
-
-  const handleItemKeyDown = (evt: KeyboardEvent<HTMLLIElement>, id: number) => {
-    if (evt.key === 'Enter') {
-      evt.preventDefault();
-      navigate(getRoute(id))
     }
   }
 
@@ -85,7 +75,6 @@ function FormSearch(): JSX.Element {
 
   const handleFormReset = () => {
     setSearchQuery('');
-    setSearchResults([]);
     setFocusedElementIndex(INDEX_DEFAULT);
   }
 
@@ -116,21 +105,7 @@ function FormSearch(): JSX.Element {
         </label>
 
         {searchResults.length > 0 && (
-          <ul className="form-search__select-list">
-            {searchResults.map((product, index) => (
-              <li
-                className="form-search__select-item"
-                tabIndex={0}
-                key={product.id}
-                ref={setItemRef(index)}
-                onClick={() => navigate(getRoute(product.id))}
-                onKeyDown={(evt) => handleItemKeyDown(evt, product.id)}
-                onMouseEnter={() => handleMouseEnter(index)}
-              >
-                {product.name}
-              </li>
-            ))}
-          </ul>
+          <FormSearchResults searchResults={searchResults} setRef={setItemRef} onMouseEnter={handleMouseEnter} />
         )}
       </form>
 

@@ -6,6 +6,8 @@ import { INDEX_DEFAULT, MIN_SEARCH_QUERY_LENGTH } from "./form-search.const";
 import useArrayRefs from '../../hooks/use-array-refs';
 import { Keys } from '../../constants/keyboard-keys.const';
 import FormSearchResults from './form-search-results';
+import useFocusWithin from '../../hooks/use-focus-within';
+import useOutsideClick from '../../hooks/use-outside-click';
 
 function FormSearch(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState('');
@@ -15,6 +17,9 @@ function FormSearch(): JSX.Element {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const [itemRefs, setItemRef] = useArrayRefs<HTMLLIElement>();
+  const { isFocused, setIsFocused, refContainer } = useFocusWithin<HTMLDivElement>();
+
+  useOutsideClick(refContainer, () => setIsFocused(false));
 
   const { ARROW_DOWN, ARROW_UP, TAB, ENTER } = Keys;
 
@@ -36,6 +41,10 @@ function FormSearch(): JSX.Element {
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const query = evt.target.value;
     setSearchQuery(query);
+  }
+
+  const handleItemOnSelect = () => {
+    setIsFocused(false);
   }
 
   const handleTab = (isShiftKey: boolean) => {
@@ -86,7 +95,10 @@ function FormSearch(): JSX.Element {
   }
 
   return (
-    <div className={`form-search ${searchQuery.length ? 'list-opened' : ''}`}>
+    <div
+      className={`form-search ${searchQuery.length ? 'list-opened' : ''}`}
+      ref={refContainer}
+    >
       <form onKeyDown={(evt) => handleKeyDown(evt)}>
         <label>
           <svg className="form-search__icon" width="16" height="16" aria-hidden="true">
@@ -104,9 +116,10 @@ function FormSearch(): JSX.Element {
           </input>
         </label>
 
-        {searchResults.length > 0 && (
-          <FormSearchResults searchResults={searchResults} setRef={setItemRef} onMouseEnter={handleMouseEnter} />
-        )}
+        {searchResults.length && isFocused
+          ? <FormSearchResults searchResults={searchResults} setRef={setItemRef} onMouseEnter={handleMouseEnter} onSelect={handleItemOnSelect} />
+          : ''
+        }
       </form>
 
       <button

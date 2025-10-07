@@ -18,14 +18,12 @@ export function useFocusWithin<T extends HTMLElement>() {
   useEffect(() => {
 
     const onFocusIn = (evt: FocusEvent) => {
-      console.log('работает onFocusIn');
       if (isInside(evt.target as Node)) {
         setIsFocused(true);
       }
     };
 
     const onFocusOut = (evt: FocusEvent) => {
-      console.log('работает onFocusOut');
       if (!isInside(evt.relatedTarget as Node | null)) {
         setIsFocused(false);
       }

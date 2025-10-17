@@ -3,6 +3,7 @@ import { TabsList } from "./tabs.const";
 import { TabsValue } from "./tabs.type";
 import TabsControl from "./tabs-control";
 import { Camera } from "../../types/camera.types";
+import { ACTIVE_CLASS } from "../../constants/class-name";
 
 type TabsProps = Pick<Camera, 'vendorCode' | 'category' | 'description' | 'type' | 'level'>
 
@@ -19,7 +20,7 @@ function Tabs({ vendorCode, category, type, level, description }: TabsProps): JS
         {Object.values(TabsList).map((value) => <TabsControl key={value} value={value} activeTab={tab} onClick={handleButtonClick} />)}
       </div>
       <div className="tabs__content">
-        <div className={`tabs__element ${tab === TabsList.Parametrs ? 'is-active' : ''}`}>
+        <div className={`tabs__element ${tab === TabsList.Parametrs ? ACTIVE_CLASS : ''}`}>
           <ul className="product__tabs-list">
             <li className="item-list"><span className="item-list__title">Артикул:</span>
               <p className="item-list__text">{vendorCode}</p>
@@ -35,7 +36,7 @@ function Tabs({ vendorCode, category, type, level, description }: TabsProps): JS
             </li>
           </ul>
         </div>
-        <div className={`tabs__element ${tab === TabsList.Description ? 'is-active' : ''}`}>
+        <div className={`tabs__element ${tab === TabsList.Description ? ACTIVE_CLASS : ''}`}>
           <div className="product__tabs-text">{description}</div>
         </div>
       </div>

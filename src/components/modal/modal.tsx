@@ -1,3 +1,4 @@
+import { ACTIVE_CLASS } from "../../constants/class-name";
 import { useLockBodyScroll } from "../../hooks/use-lock-body-scroll";
 import { useModal } from "../../store/hooks/useModal";
 
@@ -7,7 +8,7 @@ function Modal(): JSX.Element {
   useLockBodyScroll(isOpen);
 
   return (
-    <div className={`modal ${isOpen ? 'is-active' : ''}`}>
+    <div className={`modal ${isOpen ? ACTIVE_CLASS : ''}`}>
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
         <div className="modal__content">

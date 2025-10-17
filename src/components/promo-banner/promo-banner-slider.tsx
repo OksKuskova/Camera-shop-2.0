@@ -1,11 +1,16 @@
 import { Pagination, Autoplay } from "swiper/modules";
 import { Promo } from "./promo-banner.type";
 import { getPromo } from "../../mocks/promo";
+import { useModal } from "../../store/hooks/useModal";
+import { useSliderAutoplay } from "../../hooks/use-slider-autoplay";
 
 import SliderSwiper from "../slider-swiper/slider-swiper";
 import PromoBanner from "./promo-banner";
 
 function PromoBannerSlider(): JSX.Element {
+  const { isOpen: isAutoplayStopped } = useModal();
+  const { setSwiper } = useSliderAutoplay(isAutoplayStopped);
+
   const promoCards = getPromo();
 
   return (
@@ -22,6 +27,7 @@ function PromoBannerSlider(): JSX.Element {
         pagination: {
           clickable: true,
         },
+        onSwiper: setSwiper,
       }}
       slides={promoCards}
       renderSlide={(item: Promo) => <PromoBanner id={item.id} name={item.name} previewImg={item.previewImg} previewImg2x={item.previewImg2x} previewImgWebp={item.previewImgWebp} previewImgWebp2x={item.previewImgWebp2x} />}

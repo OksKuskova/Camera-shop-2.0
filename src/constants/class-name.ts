@@ -4,3 +4,5 @@ export const ClassName = {
   Review: 'review-card',
   PromoBanner: 'banner',
 } as const;
+
+export const BODY_SCROLL_LOCK = 'scroll-lock';

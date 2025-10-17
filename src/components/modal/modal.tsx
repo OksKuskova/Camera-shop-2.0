@@ -1,7 +1,10 @@
+import { useLockBodyScroll } from "../../hooks/use-lock-body-scroll";
 import { useModal } from "../../store/hooks/useModal";
 
 function Modal(): JSX.Element {
   const { isOpen } = useModal();
+
+  useLockBodyScroll(isOpen);
 
   return (
     <div className={`modal ${isOpen ? 'is-active' : ''}`}>

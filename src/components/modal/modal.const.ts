@@ -1,0 +1,1 @@
+export const MODAL_TRANSITION_TIME = 600;

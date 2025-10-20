@@ -19,14 +19,18 @@ function FormSearch(): JSX.Element {
   const [itemRefs, setItemRef] = useArrayRefs<HTMLLIElement>();
   const { isFocused, setIsFocused, refContainer } = useFocusWithin<HTMLDivElement>();
 
-  useOutsideClick(refContainer, () => setIsFocused(false));
-
-  const { ARROW_DOWN, ARROW_UP, TAB, ENTER } = Keys;
-
   const searchResults = useMemo(
     () => searchQuery.length >= MIN_SEARCH_QUERY_LENGTH ? getCamerasByName(searchQuery) : []
     , [searchQuery]
   );
+
+  const isResultsListActive = searchResults.length > 0 && isFocused;
+
+  useOutsideClick(refContainer, () => setIsFocused(false), isResultsListActive);
+
+  const { ARROW_DOWN, ARROW_UP, TAB, ENTER } = Keys;
+
+
 
   useEffect(() => {
     if (focusedElementIndex === -1) {
@@ -116,9 +120,8 @@ function FormSearch(): JSX.Element {
           </input>
         </label>
 
-        {searchResults.length && isFocused
-          ? <FormSearchResults searchResults={searchResults} setRef={setItemRef} onMouseEnter={handleMouseEnter} onSelect={handleItemOnSelect} />
-          : ''
+        {
+          isResultsListActive && <FormSearchResults searchResults={searchResults} setRef={setItemRef} onMouseEnter={handleMouseEnter} onSelect={handleItemOnSelect} />
         }
       </form>
 

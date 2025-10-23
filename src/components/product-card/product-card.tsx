@@ -8,7 +8,8 @@ import ProductPrice from '../product-price/product-price';
 import ProductTitle from '../product-title/product-title';
 import Rating from '../rating/rating';
 import { useAppDispatch } from '../../store/hooks/store.index';
-import { toggleOpenStatus } from '../../store/slices/modal-slice';
+import { openModal } from '../../store/slices/modal-slice/modal-slice';
+import { ModalContent } from '../modal/modal.const';
 
 type ProductTypeProps = {
   product: Camera;
@@ -16,6 +17,8 @@ type ProductTypeProps = {
 
 function ProductCard({ product }: ProductTypeProps): JSX.Element {
   const dispatch = useAppDispatch();
+
+  const { ADD_ITEM } = ModalContent;
 
   const { id, name, price, rating, reviewCount, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = product;
 
@@ -33,14 +36,14 @@ function ProductCard({ product }: ProductTypeProps): JSX.Element {
         <button
           className="btn btn--purple product-card__btn"
           type="button"
-          onClick={() => dispatch(toggleOpenStatus())}
+          onClick={() => dispatch(openModal({ modalContent: ADD_ITEM, modalContentProps: { id } }))}
         >
           Купить
         </button>
         <Link className="btn btn--transparent" to={getRoute(id)}>Подробнее
         </Link>
       </div>
-    </div>
+    </div >
   );
 }
 

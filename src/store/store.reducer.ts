@@ -1,7 +1,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { SliceName } from "./slices/slices.const";
-import modalSlice from "./slices/modal-slice";
+import modalSlice from "./slices/modal-slice/modal-slice";
 
 export const rootReducer = combineReducers({
-  [SliceName.Modal]: modalSlice.reducer,
+	[SliceName.Modal]: modalSlice.reducer,
 })

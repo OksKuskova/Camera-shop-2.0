@@ -3,6 +3,7 @@ export const ClassName = {
   Product: 'product',
   Review: 'review-card',
   PromoBanner: 'banner',
+  BasketItem: 'basket-item',
 } as const;
 
 export const BODY_SCROLL_LOCK = 'scroll-lock';

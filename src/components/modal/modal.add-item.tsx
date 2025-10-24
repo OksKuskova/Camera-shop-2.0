@@ -5,10 +5,11 @@ import { ClassName } from "../../constants/class-name";
 import ModalError from "./modal.error";
 import ProductImage from "../product-image/product-image";
 import BasketItemDescription from "../basket-item/basket-item-description";
+import { CommonModalProps } from "../../store/slices/modal-slice/modal-slice.type";
 
-type AddItemProps = Pick<Camera, 'id'>;
+type AddItemProps = Pick<Camera, 'id'> & CommonModalProps;
 
-function AddItem({ id }: AddItemProps): JSX.Element {
+function AddItem({ id, addFocusableRef }: AddItemProps): JSX.Element {
   const currentProduct = getCameraById(id);
 
   if (!currentProduct) {
@@ -30,6 +31,7 @@ function AddItem({ id }: AddItemProps): JSX.Element {
         <button
           className="btn btn--purple modal__btn modal__btn--fit-width"
           type="button"
+          ref={addFocusableRef}
         >
           <svg width="24" height="16" aria-hidden="true">
             <use xlinkHref="#icon-add-basket"></use>

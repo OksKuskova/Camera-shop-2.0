@@ -7,6 +7,10 @@ export type ModalPropsMap = {
 
 export type ModalContentType = Value<typeof ModalContent>;
 
+export type CommonModalProps = {
+  addFocusableRef: (el: HTMLElement | null) => void,
+}
+
 export type OpenModalPayload<T extends ModalContentType> = {
   modalContent: T;
   modalContentProps?: ModalPropsMap[T];

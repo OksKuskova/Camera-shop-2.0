@@ -12,8 +12,7 @@ function Modal(): JSX.Element | null {
   const modalContentRef = useRef<HTMLDivElement | null>(null);
 
   const { isOpen, modalContentType, modalContentProps } = useModal();
-
-  useModalOpen(isOpen, modalContentRef, () => dispatch(closeModal()));
+  const addFocusableRef = useModalOpen(isOpen, modalContentRef, () => dispatch(closeModal()));
 
   if (!modalContentType || !modalContentProps) {
     return null;
@@ -26,8 +25,13 @@ function Modal(): JSX.Element | null {
       <div className="modal__wrapper">
         <div className="modal__overlay"></div>
         <div className="modal__content" ref={modalContentRef}>
-          <ModalContent {...modalContentProps} />
-          <button className="cross-btn" type="button" aria-label="Закрыть попап" onClick={() => dispatch(closeModal())}>
+          <ModalContent {...modalContentProps} addFocusableRef={addFocusableRef} />
+          <button
+            className="cross-btn"
+            type="button"
+            aria-label="Закрыть попап"
+            onClick={() => dispatch(closeModal())}
+            ref={addFocusableRef}>
             <svg width="10" height="10" aria-hidden="true">
               <use xlinkHref="#icon-close"></use>
             </svg>

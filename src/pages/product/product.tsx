@@ -1,29 +1,34 @@
 
 
 import { useParams } from "react-router-dom";
-import { getCameraById } from "../../mocks/cameras";
 import { ClassName } from "../../constants/class-name";
+import { useGetCameraByIdQuery } from "../../store/api/api";
+import { errorToFallbackProps } from "../../components/fallback-state/fallback-state.utils";
+import { AppError } from "../../types/app-error.type";
 
 import ProductImage from "../../components/product-image/product-image";
-import NotFound from "../not-found/not-found";
 import Rating from "../../components/rating/rating";
 import ProductPrice from "../../components/product-price/product-price";
 import Tabs from "../../components/tabs/tabs";
 import ReviewBlock from "../../components/review/review-block";
-import { getProductSimilar } from "../../mocks/product-similar";
-import SliderSwiper from "../../components/slider-swiper/slider-swiper";
-import { Navigation } from "swiper/modules";
-import { Camera } from "../../types/camera.types";
-import ProductCard from "../../components/product-card/product-card";
 import ProductSimilar from "../../components/product-similar/product-similar";
+import FallbackState from "../../components/fallback-state/fallback-state";
+import Loader from "../../components/loader/loader";
 
 function Product(): JSX.Element {
   const { id } = useParams();
-  const currentProduct = getCameraById(Number(id));
-  const productSimilar = getProductSimilar();
+  const { data: currentProduct, isLoading, isError, error, refetch } = useGetCameraByIdQuery(Number(id));
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (isError) {
+    return <FallbackState {...errorToFallbackProps(error as AppError, refetch)} />
+  }
 
   if (!currentProduct) {
-    return <NotFound />
+    return <FallbackState />
   }
 
   const { name, rating, reviewCount, price, vendorCode, type, category, level, description, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = currentProduct;
@@ -74,38 +79,6 @@ function Product(): JSX.Element {
       </div>
       <div className="page-content__section">
         <ProductSimilar />
-        {/* <section className="product-similar">
-          <div className="container">
-            <h2 className="title title--h3">Похожие товары</h2>
-            <div className="product-similar__slider">
-              <SliderSwiper<Camera>
-                modules={[Navigation]}
-                sliderParams={{
-                  slidesPerView: 3,
-                  spaceBetween: 32,
-                  navigation: {
-                    prevEl: '.slider-controls.slider-controls--prev',
-                    nextEl: '.slider-controls.slider-controls--next',
-                  }
-                }}
-
-                slides={productSimilar}
-                renderSlide={(item: Camera) => <ProductCard product={item} />}
-              />
-
-              <button className="slider-controls slider-controls--prev" type="button" aria-label="Предыдущий слайд">
-                <svg width="7" height="12" aria-hidden="true">
-                  <use xlinkHref="#icon-arrow"></use>
-                </svg>
-              </button>
-              <button className="slider-controls slider-controls--next" type="button" aria-label="Следующий слайд" onClick={() => console.log('Клик')}>
-                <svg width="7" height="12" aria-hidden="true">
-                  <use xlinkHref="#icon-arrow"></use>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </section> */}
       </div>
       <div className="page-content__section">
         <ReviewBlock cameraId={Number(id)} />

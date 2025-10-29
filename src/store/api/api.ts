@@ -12,8 +12,11 @@ export const api = createApi({
     getCameras: build.query<Camera[], void>({
       query: () => ApiRoute.Cameras,
     }),
+    getCameraById: build.query<Camera, number>({
+      query: (id) => `${ApiRoute.Cameras}/${id}`
+    })
   }),
 
 })
 
-export const { useGetCamerasQuery } = api;
+export const { useGetCamerasQuery, useGetCameraByIdQuery } = api;

@@ -1,9 +1,27 @@
-import ProductCard from '../../components/product-card/product-card';
-import { getCameras } from '../../mocks/cameras';
+import { useGetCamerasQuery } from '../../store/api/api';
 import { Camera } from '../../types/camera.types';
 
+import FallbackState from '../../components/fallback-state/fallback-state';
+import Loader from '../../components/loader/loader';
+import ProductCard from '../../components/product-card/product-card';
+import { errorToFallbackProps } from '../../components/fallback-state/fallback-state.utils';
+import { AppError } from '../../types/app-error.type';
+
 function Catalog(): JSX.Element {
-  const products = getCameras();
+
+  const { data: products, isLoading, isError, error, refetch } = useGetCamerasQuery();
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (isError) {
+    return <FallbackState {...errorToFallbackProps(error as AppError, refetch)} />
+  }
+
+  if (!products || products.length === 0) {
+    return <FallbackState />
+  }
 
   return (
     <div className="page-content">
@@ -145,44 +163,6 @@ function Catalog(): JSX.Element {
                 {
                   products.map((product: Camera) => <ProductCard key={product.id} product={product} />)
                 }
-                {/* <div className="product-card">
-                    <div className="product-card__img">
-                      <picture>
-                        <source type="image/webp" srcSet="img/content/das-auge.webp, img/content/das-auge@2x.webp 2x" />
-                        <img src="img/content/das-auge.jpg" srcSet="img/content/das-auge@2x.jpg 2x" width="280" height="240" alt="Ретрокамера «Das Auge IV»" />
-                      </picture>
-                    </div>
-                    <div className="product-card__info">
-                      <div className="rate product-card__rate">
-                        <svg width="17" height="16" aria-hidden="true">
-                          <use xlinkHref="#icon-full-star"></use>
-                        </svg>
-                        <svg width="17" height="16" aria-hidden="true">
-                          <use xlinkHref="#icon-full-star"></use>
-                        </svg>
-                        <svg width="17" height="16" aria-hidden="true">
-                          <use xlinkHref="#icon-full-star"></use>
-                        </svg>
-                        <svg width="17" height="16" aria-hidden="true">
-                          <use xlinkHref="#icon-star"></use>
-                        </svg>
-                        <svg width="17" height="16" aria-hidden="true">
-                          <use xlinkHref="#icon-star"></use>
-                        </svg>
-                        <p className="visually-hidden">Рейтинг: 3</p>
-                        <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>23</p>
-                      </div>
-                      <p className="product-card__title">Ретрокамера «Das Auge IV»</p>
-                      <p className="product-card__price"><span className="visually-hidden">Цена:</span>73 450 ₽
-                      </p>
-                    </div>
-                    <div className="product-card__buttons">
-                      <button className="btn btn--purple product-card__btn" type="button">Купить
-                      </button>
-                      <a className="btn btn--transparent" href="#">Подробнее
-                      </a>
-                    </div>
-                  </div> */}
               </div>
               {/* <div className="pagination">
                   <ul className="pagination__list">

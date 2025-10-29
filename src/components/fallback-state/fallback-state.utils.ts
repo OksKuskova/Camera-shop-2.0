@@ -1,9 +1,19 @@
 import { AppRoute } from "../../constants/router";
-import { AppError } from "../../types/app-error.type";
 import { FallbackStateProps } from "./fallback-state";
+import { FallbackSource } from "./fallback-state.type";
 
-export const errorToFallbackProps = (error: AppError, refetch?: () => void): FallbackStateProps => {
-  const refetchProps = refetch ? { actionLabel: 'Повторить', onAction: refetch } : {};
+export const sourceToFallbackProps = (source: FallbackSource): FallbackStateProps => {
+  const refetchProps = source.refetch ? { actionLabel: 'Повторить', onAction: source.refetch } : {};
+
+  if (source.type === 'empty') {
+    return {
+      title: 'Нет данных',
+      message: 'Здесь пока ничего нет.',
+      ...refetchProps,
+    }
+  }
+
+  const error = source.error;
 
   switch (error.kind) {
     case 'network':
@@ -48,5 +58,4 @@ export const errorToFallbackProps = (error: AppError, refetch?: () => void): Fal
         ...refetchProps,
       };
   }
-
 }

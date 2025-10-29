@@ -10,7 +10,7 @@ export type FallbackStateProps = {
   onAction?: () => void,
 }
 
-function FallbackState({ title = 'Нет доступных товаров', message = 'Здесь пока ничего нет', actionLabel, actionHref, onAction }: FallbackStateProps): JSX.Element {
+function FallbackState({ title, message, actionLabel, actionHref, onAction }: FallbackStateProps): JSX.Element {
   return (
     <div className="page-content page-content--fallback">
       <div className="container">

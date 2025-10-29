@@ -1,26 +1,28 @@
 import { useGetCamerasQuery } from '../../store/api/api';
 import { Camera } from '../../types/camera.types';
+import { sourceToFallbackProps } from '../../components/fallback-state/fallback-state.utils';
+import { AppError } from '../../types/app-error.type';
+import { FallbackSource } from '../../components/fallback-state/fallback-state.type';
 
 import FallbackState from '../../components/fallback-state/fallback-state';
 import Loader from '../../components/loader/loader';
 import ProductCard from '../../components/product-card/product-card';
-import { errorToFallbackProps } from '../../components/fallback-state/fallback-state.utils';
-import { AppError } from '../../types/app-error.type';
 
 function Catalog(): JSX.Element {
-
   const { data: products, isLoading, isError, error, refetch } = useGetCamerasQuery();
+
+  const fallbackSource: FallbackSource | null = isError
+    ? { type: 'error', error: error as AppError, refetch }
+    : (!products || products.length === 0)
+      ? { type: 'empty', refetch }
+      : null;
 
   if (isLoading) {
     return <Loader />
   }
 
-  if (isError) {
-    return <FallbackState {...errorToFallbackProps(error as AppError, refetch)} />
-  }
-
-  if (!products || products.length === 0) {
-    return <FallbackState />
+  if (fallbackSource) {
+    return <FallbackState {...sourceToFallbackProps(fallbackSource)} />
   }
 
   return (
@@ -161,7 +163,7 @@ function Catalog(): JSX.Element {
                 </div> */}
               <div className="cards catalog__cards">
                 {
-                  products.map((product: Camera) => <ProductCard key={product.id} product={product} />)
+                  products?.map((product: Camera) => <ProductCard key={product.id} product={product} />)
                 }
               </div>
               {/* <div className="pagination">

@@ -3,8 +3,9 @@
 import { useParams } from "react-router-dom";
 import { ClassName } from "../../constants/class-name";
 import { useGetCameraByIdQuery } from "../../store/api/api";
-import { errorToFallbackProps } from "../../components/fallback-state/fallback-state.utils";
+import { sourceToFallbackProps } from "../../components/fallback-state/fallback-state.utils";
 import { AppError } from "../../types/app-error.type";
+import { FallbackSource } from "../../components/fallback-state/fallback-state.type";
 
 import ProductImage from "../../components/product-image/product-image";
 import Rating from "../../components/rating/rating";
@@ -19,19 +20,21 @@ function Product(): JSX.Element {
   const { id } = useParams();
   const { data: currentProduct, isLoading, isError, error, refetch } = useGetCameraByIdQuery(Number(id));
 
+  const fallbackSource: FallbackSource | null = isError
+    ? { type: 'error', error: error as AppError, refetch }
+    : (!currentProduct)
+      ? { type: 'empty', refetch }
+      : null;
+
   if (isLoading) {
     return <Loader />
   }
 
-  if (isError) {
-    return <FallbackState {...errorToFallbackProps(error as AppError, refetch)} />
+  if (fallbackSource) {
+    return <FallbackState {...sourceToFallbackProps(fallbackSource)} />
   }
 
-  if (!currentProduct) {
-    return <FallbackState />
-  }
-
-  const { name, rating, reviewCount, price, vendorCode, type, category, level, description, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = currentProduct;
+  const { name, rating, reviewCount, price, vendorCode, type, category, level, description, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = currentProduct!;
 
   return (
     <div className="page-content">

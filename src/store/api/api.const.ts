@@ -7,7 +7,7 @@ export const ApiRoute = {
   Cameras: '/cameras',
   Reviews: '/reviews',
   Orders: '/orders',
-  Promo: '/promo',
+  PromoProduct: '/promo',
   PromoCode: '/coupons',
   Similar: '/similar',
 } as const;

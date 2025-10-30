@@ -2,9 +2,10 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { Camera } from '../../types/camera.types';
 import { ApiRoute, ApiConfig } from './api.const';
 import { baseQueryWithErrorHandling } from './api.base-query-with-error-handling';
+import { Promo } from '../../components/promo-banner/promo-banner.type';
 
 const { PATH_NAME } = ApiConfig;
-const { Cameras, Similar } = ApiRoute;
+const { Cameras, Similar, PromoProduct } = ApiRoute;
 
 export const api = createApi({
   reducerPath: PATH_NAME,
@@ -19,8 +20,11 @@ export const api = createApi({
     getSimilarProducts: build.query<Camera[], number>({
       query: (id) => `${Cameras}/${id}${Similar}`
     }),
+    getPromo: build.query<Promo[], void>({
+      query: () => PromoProduct,
+    })
   }),
 
 })
 
-export const { useGetCamerasQuery, useGetCameraByIdQuery, useGetSimilarProductsQuery } = api;
+export const { useGetCamerasQuery, useGetCameraByIdQuery, useGetSimilarProductsQuery, useGetPromoQuery } = api;

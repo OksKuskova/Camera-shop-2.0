@@ -1,17 +1,21 @@
 import { Pagination, Autoplay } from "swiper/modules";
 import { Promo } from "./promo-banner.type";
-import { getPromo } from "../../mocks/promo";
 import { useModal } from "../../store/hooks/useModal";
 import { useSliderAutoplay } from "../../hooks/use-slider-autoplay";
+import { useGetPromoQuery } from "../../store/api/api";
 
 import SliderSwiper from "../slider-swiper/slider-swiper";
 import PromoBanner from "./promo-banner";
 
-function PromoBannerSlider(): JSX.Element {
+function PromoBannerSlider(): JSX.Element | null {
   const { isOpen: isAutoplayStopped } = useModal();
   const { setSwiper } = useSliderAutoplay(isAutoplayStopped);
 
-  const promoCards = getPromo();
+  const { data: promoCards, isError } = useGetPromoQuery();
+
+  if (!promoCards || promoCards.length === 0 || isError) {
+    return null;
+  }
 
   return (
     <SliderSwiper<Promo>

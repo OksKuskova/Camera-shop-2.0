@@ -12,13 +12,13 @@ import Rating from "../../components/rating/rating";
 import ProductPrice from "../../components/product-price/product-price";
 import Tabs from "../../components/tabs/tabs";
 import ReviewBlock from "../../components/review/review-block";
-import ProductSimilar from "../../components/product-similar/product-similar";
 import FallbackState from "../../components/fallback-state/fallback-state";
 import Loader from "../../components/loader/loader";
+import SimilarProducts from "../../components/similar-products/similar-products";
 
 function Product(): JSX.Element {
-  const { id } = useParams();
-  const { data: currentProduct, isLoading, isError, error, refetch } = useGetCameraByIdQuery(Number(id));
+  const { id: productId } = useParams();
+  const { data: currentProduct, isLoading, isError, error, refetch } = useGetCameraByIdQuery(Number(productId));
 
   const fallbackSource: FallbackSource | null = isError
     ? { type: 'error', error: error as AppError, refetch }
@@ -34,7 +34,7 @@ function Product(): JSX.Element {
     return <FallbackState {...sourceToFallbackProps(fallbackSource)} />
   }
 
-  const { name, rating, reviewCount, price, vendorCode, type, category, level, description, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = currentProduct!;
+  const { id, name, rating, reviewCount, price, vendorCode, type, category, level, description, previewImg, previewImg2x, previewImgWebp, previewImgWebp2x } = currentProduct!;
 
   return (
     <div className="page-content">
@@ -81,7 +81,7 @@ function Product(): JSX.Element {
         </section>
       </div>
       <div className="page-content__section">
-        <ProductSimilar />
+        <SimilarProducts id={id} />
       </div>
       <div className="page-content__section">
         <ReviewBlock cameraId={Number(id)} />

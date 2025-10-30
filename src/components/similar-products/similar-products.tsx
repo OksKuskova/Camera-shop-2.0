@@ -1,13 +1,14 @@
 import type { Swiper as SwiperClass } from 'swiper';
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Camera } from "../../types/camera.types";
-import { getProductSimilar } from "../../mocks/product-similar";
+import { useGetSimilarProductsQuery } from '../../store/api/api';
 
 import ProductCard from "../product-card/product-card";
 import SliderSwiper from "../slider-swiper/slider-swiper";
 
-function ProductSimilar(): JSX.Element {
+type SimilarProductsProps = Pick<Camera, 'id'>;
+
+function SimilarProducts({ id }: SimilarProductsProps): JSX.Element | null {
   const swiperRef = useRef<SwiperClass | null>(null);
 
   const prevRef = useRef<HTMLButtonElement | null>(null);
@@ -16,7 +17,7 @@ function ProductSimilar(): JSX.Element {
   const [canPrevSwipe, setCanPrevSwipe] = useState(true);
   const [canNextSwipe, setCanNextSwipe] = useState(true);
 
-  const productSimilar = getProductSimilar();
+  const { data: similarProducts, isError } = useGetSimilarProductsQuery(id);
 
   const updateNavState = useCallback((swiper: SwiperClass) => {
     setCanPrevSwipe(!swiper.isBeginning);
@@ -41,6 +42,10 @@ function ProductSimilar(): JSX.Element {
     };
   }, [handlePrev, handleNext]);
 
+  if (!similarProducts || similarProducts?.length === 0 || isError) {
+    return null;
+  }
+
   return (
     <section className="product-similar">
       <div className="container">
@@ -60,7 +65,7 @@ function ProductSimilar(): JSX.Element {
               },
               onSlideChange: (swiper: SwiperClass) => updateNavState(swiper),
             }}
-            slides={productSimilar}
+            slides={similarProducts}
             renderSlide={(item: Camera) => <ProductCard product={item} />}
           />
 
@@ -91,4 +96,4 @@ function ProductSimilar(): JSX.Element {
   )
 }
 
-export default ProductSimilar;
+export default SimilarProducts;

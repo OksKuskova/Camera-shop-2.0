@@ -1,10 +1,12 @@
 import './form-search.style.css';
 
 import { ChangeEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
-import { getCamerasByName } from "../../mocks/cameras";
 import { INDEX_DEFAULT, MIN_SEARCH_QUERY_LENGTH } from "./form-search.const";
-import useArrayRefs from '../../hooks/use-array-refs';
+import { useGetCamerasQuery } from '../../store/api/api';
+import { getProductsByName } from './form-search.utils';
 import { Keys } from '../../constants/keyboard-keys.const';
+
+import useArrayRefs from '../../hooks/use-array-refs';
 import FormSearchResults from './form-search-results';
 import useFocusWithin from '../../hooks/use-focus-within';
 import useOutsideClick from '../../hooks/use-outside-click';
@@ -19,9 +21,11 @@ function FormSearch(): JSX.Element {
   const [itemRefs, setItemRef] = useArrayRefs<HTMLLIElement>();
   const { isFocused, setIsFocused, refContainer } = useFocusWithin<HTMLDivElement>();
 
+  const { data: products = [] } = useGetCamerasQuery();
+
   const searchResults = useMemo(
-    () => searchQuery.length >= MIN_SEARCH_QUERY_LENGTH ? getCamerasByName(searchQuery) : []
-    , [searchQuery]
+    () => searchQuery.length >= MIN_SEARCH_QUERY_LENGTH ? getProductsByName(products, searchQuery) : []
+    , [searchQuery, products]
   );
 
   const isResultsListActive = searchResults.length > 0 && isFocused;
@@ -29,8 +33,6 @@ function FormSearch(): JSX.Element {
   useOutsideClick(refContainer, () => setIsFocused(false), isResultsListActive);
 
   const { ARROW_DOWN, ARROW_UP, TAB, ENTER } = Keys;
-
-
 
   useEffect(() => {
     if (focusedElementIndex === -1) {
@@ -120,9 +122,8 @@ function FormSearch(): JSX.Element {
           </input>
         </label>
 
-        {
-          isResultsListActive && <FormSearchResults searchResults={searchResults} setRef={setItemRef} onMouseEnter={handleMouseEnter} onSelect={handleItemOnSelect} />
-        }
+        {isResultsListActive && <FormSearchResults searchResults={searchResults} setRef={setItemRef} onMouseEnter={handleMouseEnter} onSelect={handleItemOnSelect} />}
+
       </form>
 
       <button
@@ -136,7 +137,6 @@ function FormSearch(): JSX.Element {
           <use xlinkHref="#icon-close"></use>
         </svg><span className="visually-hidden">Сбросить поиск</span>
       </button>
-
     </div>
   )
 }

@@ -15,6 +15,7 @@ import ReviewBlock from "../../components/review/review-block";
 import FallbackState from "../../components/fallback-state/fallback-state";
 import Loader from "../../components/loader/loader";
 import SimilarProducts from "../../components/similar-products/similar-products";
+import Breadcrumbs from "../../components/breadcrumbs/breadcrumbs";
 
 function Product(): JSX.Element {
   const { id: productId } = useParams();
@@ -38,28 +39,7 @@ function Product(): JSX.Element {
 
   return (
     <div className="page-content">
-      <div className="breadcrumbs">
-        <div className="container">
-          <ul className="breadcrumbs__list">
-            <li className="breadcrumbs__item">
-              <a className="breadcrumbs__link" href="index.html">Главная
-                <svg width="5" height="8" aria-hidden="true">
-                  <use xlinkHref="#icon-arrow-mini"></use>
-                </svg>
-              </a>
-            </li>
-            <li className="breadcrumbs__item">
-              <a className="breadcrumbs__link" href="catalog.html">Каталог
-                <svg width="5" height="8" aria-hidden="true">
-                  <use xlinkHref="#icon-arrow-mini"></use>
-                </svg>
-              </a>
-            </li>
-            <li className="breadcrumbs__item"><span className="breadcrumbs__link breadcrumbs__link--active">Ретрокамера «Das Auge IV»</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <Breadcrumbs productName={name} />
       <div className="page-content__section">
         <section className="product">
           <div className="container">

@@ -1,41 +1,28 @@
 import { useGetCamerasQuery } from '../../store/api/api';
 import { Camera } from '../../types/camera.types';
 import { resolveCatalogData, sourceToFallbackProps } from '../../components/fallback-state/fallback-state.utils';
-import { ChangeEvent, useState } from 'react';
-import { SORT_TYPE_DEFAULT, SORT_ORDER_DEFAULT } from '../../components/form-sort/form-sort.const';
-import { Sort } from '../../components/form-sort/form-sort.type';
-import { sortProducts } from '../../components/form-sort/form-sort.utils';
 
 import FallbackState from '../../components/fallback-state/fallback-state';
 import Loader from '../../components/loader/loader';
 import ProductCard from '../../components/product-card/product-card';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import FormSort from '../../components/form-sort/form-sort';
+import { useCatalogSort } from '../../hooks/use-catalog-sort';
 
 
 function Catalog(): JSX.Element {
-  const [sort, setSort] = useState<Sort>({
-    type: SORT_TYPE_DEFAULT,
-    order: SORT_ORDER_DEFAULT,
-  })
+  const { data, isLoading, isError, error, refetch } = useGetCamerasQuery();
 
-  const { data: products, isLoading, isError, error, refetch } = useGetCamerasQuery();
+  const result = resolveCatalogData(data, isError, error, refetch);
 
-  const { type, source } = resolveCatalogData(products, isError, error, refetch);
+  const { sort, handleSortChange, sortedProducts } = useCatalogSort(result.type === 'success' ? result.products : []);
 
   if (isLoading) {
     return <Loader />
   }
 
-  if (type === 'fallback') {
-    return <FallbackState {...sourceToFallbackProps(source)} />
-  }
-
-  const sortedProducts = sortProducts(source, sort);
-
-  const handleSortChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    const { name, id } = evt.target;
-    setSort({ ...sort, [name]: id });
+  if (result.type === 'fallback') {
+    return <FallbackState {...sourceToFallbackProps(result.source)} />
   }
 
   return (

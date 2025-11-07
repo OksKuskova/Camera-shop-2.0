@@ -15,7 +15,12 @@ export function useCatalogSort(products: Camera[]) {
     setSort({ ...sort, [name]: id });
   }
 
-  const sortedProducts = useMemo(() => sortProducts(products, sort), [products, sort]);
+  const sortedProducts = useMemo(() => {
+    if (products.length === 0) {
+      return [];
+    }
+    return sortProducts(products, sort);
+  }, [products, sort]);
 
   return { sort, handleSortChange, sortedProducts };
 }

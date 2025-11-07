@@ -71,5 +71,5 @@ export const resolveCatalogData = (data: Camera[] | undefined, isError: boolean,
     return { type: "fallback", source: { type: 'empty', refetch } };
   }
 
-  return { type: 'success', source: data };
+  return { type: 'success', products: data };
 }

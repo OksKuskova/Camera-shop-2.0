@@ -1,29 +1,41 @@
 import { useGetCamerasQuery } from '../../store/api/api';
 import { Camera } from '../../types/camera.types';
-import { sourceToFallbackProps } from '../../components/fallback-state/fallback-state.utils';
-import { AppError } from '../../types/app-error.type';
-import { FallbackSource } from '../../components/fallback-state/fallback-state.type';
+import { resolveCatalogData, sourceToFallbackProps } from '../../components/fallback-state/fallback-state.utils';
+import { ChangeEvent, useState } from 'react';
+import { SORT_TYPE_DEFAULT, SORT_ORDER_DEFAULT } from '../../components/form-sort/form-sort.const';
+import { Sort } from '../../components/form-sort/form-sort.type';
+import { sortProducts } from '../../components/form-sort/form-sort.utils';
 
 import FallbackState from '../../components/fallback-state/fallback-state';
 import Loader from '../../components/loader/loader';
 import ProductCard from '../../components/product-card/product-card';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
+import FormSort from '../../components/form-sort/form-sort';
+
 
 function Catalog(): JSX.Element {
+  const [sort, setSort] = useState<Sort>({
+    type: SORT_TYPE_DEFAULT,
+    order: SORT_ORDER_DEFAULT,
+  })
+
   const { data: products, isLoading, isError, error, refetch } = useGetCamerasQuery();
 
-  const fallbackSource: FallbackSource | null = isError
-    ? { type: 'error', error: error as AppError, refetch }
-    : (!products || products.length === 0)
-      ? { type: 'empty', refetch }
-      : null;
+  const { type, source } = resolveCatalogData(products, isError, error, refetch);
 
   if (isLoading) {
     return <Loader />
   }
 
-  if (fallbackSource) {
-    return <FallbackState {...sourceToFallbackProps(fallbackSource)} />
+  if (type === 'fallback') {
+    return <FallbackState {...sourceToFallbackProps(source)} />
+  }
+
+  const sortedProducts = sortProducts(source, sort);
+
+  const handleSortChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    const { name, id } = evt.target;
+    setSort({ ...sort, [name]: id });
   }
 
   return (
@@ -113,44 +125,10 @@ function Catalog(): JSX.Element {
                 </div> */}
             </div>
             <div className="catalog__content">
-              {/* <div className="catalog-sort">
-                  <form action="#">
-                    <div className="catalog-sort__inner">
-                      <p className="title title&#45;&#45;h5">Сортировать:</p>
-                      <div className="catalog-sort__type">
-                        <div className="catalog-sort__btn-text">
-                          <input type="radio" id="sortPrice" name="sort"></input>
-                          <label htmlFor="sortPrice">по цене</label>
-                        </div>
-                        <div className="catalog-sort__btn-text">
-                          <input type="radio" id="sortPopular" name="sort"></input>
-                          <label htmlFor="sortPopular">по популярности</label>
-                        </div>
-                      </div>
-                      <div className="catalog-sort__order">
-                        <div className="catalog-sort__btn catalog-sort__btn&#45;&#45;up">
-                          <input type="radio" id="up" name="sort-icon" aria-label="По возрастанию"></input>
-                          <label htmlFor="up">
-                            <svg width="16" height="14" aria-hidden="true">
-                              <use xlinkHref="#icon-sort"></use>
-                            </svg>
-                          </label>
-                        </div>
-                        <div className="catalog-sort__btn catalog-sort__btn&#45;&#45;down">
-                          <input type="radio" id="down" name="sort-icon" aria-label="По убыванию"></input>
-                          <label htmlFor="down">
-                            <svg width="16" height="14" aria-hidden="true">
-                              <use xlinkHref="#icon-sort"></use>
-                            </svg>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div> */}
+              <FormSort sort={sort} onChange={handleSortChange} />
               <div className="cards catalog__cards">
                 {
-                  products?.map((product: Camera) => <ProductCard key={product.id} product={product} />)
+                  sortedProducts.map((product: Camera) => <ProductCard key={product.id} product={product} />)
                 }
               </div>
               {/* <div className="pagination">

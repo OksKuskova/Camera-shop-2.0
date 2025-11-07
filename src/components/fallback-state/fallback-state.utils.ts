@@ -1,6 +1,8 @@
 import { AppRoute } from "../../constants/router";
+import { AppError } from "../../types/app-error.type";
+import { Camera } from "../../types/camera.types";
 import { FallbackStateProps } from "./fallback-state";
-import { FallbackSource } from "./fallback-state.type";
+import { FallbackSource, Resolution } from "./fallback-state.type";
 
 export const sourceToFallbackProps = (source: FallbackSource): FallbackStateProps => {
   const refetchProps = source.refetch ? { actionLabel: 'Повторить', onAction: source.refetch } : {};
@@ -58,4 +60,16 @@ export const sourceToFallbackProps = (source: FallbackSource): FallbackStateProp
         ...refetchProps,
       };
   }
+}
+
+export const resolveCatalogData = (data: Camera[] | undefined, isError: boolean, error: unknown, refetch: () => void): Resolution => {
+  if (isError) {
+    return { type: "fallback", source: { type: 'error', error: error as AppError, refetch } };
+  }
+
+  if (!data || data.length === 0) {
+    return { type: "fallback", source: { type: 'empty', refetch } };
+  }
+
+  return { type: 'success', source: data };
 }

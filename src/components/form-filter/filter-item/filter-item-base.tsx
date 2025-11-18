@@ -1,17 +1,24 @@
 import { InputHTMLAttributes } from "react"
 
 type FilterItemBaseProps = InputHTMLAttributes<HTMLInputElement> & {
-  label: string
+  label: string,
 }
 
-function FilterItemBase({ label, type, value, name }: FilterItemBaseProps): JSX.Element {
+function FilterItemBase({ label, type, value, name, checked, onChange }: FilterItemBaseProps): JSX.Element {
+
   return (
     <div className={`custom-${type} catalog-filter__item`}>
       <label>
-        <input type={type} name={name} value={value}>
-          <span className="custom-radio__icon"></span>
-          <span className="custom-radio__label">{label}</span>
+        <input
+          type={type}
+          name={name}
+          value={value}
+          checked={checked}
+          onChange={onChange}
+        >
         </input>
+        <span className={`custom-${type}__icon`}></span>
+        <span className={`custom-${type}__label`}>{label}</span>
       </label>
     </div>
   )

@@ -11,10 +11,10 @@ function FilterCategory(): JSX.Element {
 
   const handleInputChange = (category: CameraCategoryValue) => {
     dispatch(setCategory(category));
-  }
 
-  if (currentCategory === CameraCategory.Videocamera) {
-    dispatch(resetUnavailableTypes());
+    if (currentCategory === CameraCategory.Videocamera) {
+      dispatch(resetUnavailableTypes());
+    }
   }
 
   return (

@@ -1,6 +1,6 @@
 import { CameraCategory } from "../../../constants/camera.const";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks/store.index";
-import { getCategory, setCategory } from "../../../store/slices/filter-slice/filter-slice";
+import { getCategory, resetUnavailableTypes, setCategory } from "../../../store/slices/filter-slice/filter-slice";
 import { CameraCategoryValue } from "../../../types/camera.types";
 import FilterItemBase from "../filter-item/filter-item-base";
 
@@ -11,6 +11,10 @@ function FilterCategory(): JSX.Element {
 
   const handleInputChange = (category: CameraCategoryValue) => {
     dispatch(setCategory(category));
+  }
+
+  if (currentCategory === CameraCategory.Videocamera) {
+    dispatch(resetUnavailableTypes());
   }
 
   return (

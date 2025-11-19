@@ -5,7 +5,7 @@ type FilterItemBaseProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string,
 }
 
-function FilterItemBase({ label, type, value, name, checked, onChange }: FilterItemBaseProps): JSX.Element {
+function FilterItemBase({ label, type, value, name, checked, disabled, onChange }: FilterItemBaseProps): JSX.Element {
   const htmlName = name ? toKebabCase(name) : '';
   const htmlValue = value ? toKebabCase(String(value)) : '';
 
@@ -17,6 +17,7 @@ function FilterItemBase({ label, type, value, name, checked, onChange }: FilterI
           name={htmlName}
           value={htmlValue}
           checked={checked}
+          disabled={disabled}
           onChange={onChange}
         />
         <span className={`custom-${type}__icon`}></span>

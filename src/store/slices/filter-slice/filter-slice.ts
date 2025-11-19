@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CameraCategoryValue, CameraTypeValue, CameraLevelValue } from "../../../types/camera.types";
 import { SliceName } from "../slices.const";
 import { State } from "../../store.type";
+import { VIDEOCAMERA_DISABLED_TYPES } from "../../../components/form-filter/form-filter.const";
 
 type FilterState = {
   category: CameraCategoryValue | null,
@@ -36,6 +37,9 @@ const filterSlice = createSlice({
         state.levels.push(action.payload);
       }
     },
+    resetUnavailableTypes: (state: FilterState) => {
+      state.types = state.types.filter((type) => !VIDEOCAMERA_DISABLED_TYPES.includes(type))
+    }
   }
 })
 
@@ -43,6 +47,6 @@ export const getCategory = (state: State) => state.filter.category;
 export const getTypes = (state: State) => state.filter.types;
 export const getLevels = (state: State) => state.filter.levels;
 
-export const { setCategory, setTypes, setLevels } = filterSlice.actions;
+export const { setCategory, setTypes, setLevels, resetUnavailableTypes } = filterSlice.actions;
 
 export default filterSlice;

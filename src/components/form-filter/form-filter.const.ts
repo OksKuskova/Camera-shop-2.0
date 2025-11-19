@@ -1,3 +1,6 @@
+import { CameraType } from "../../constants/camera.const";
+import { CameraTypeValue } from "../../types/camera.types";
+
 export const CAMEL_TO_KEBAB = {
   regex: /([a-z])([A-Z])/g,
   replace: '$1-$2'
@@ -9,4 +12,5 @@ export const FilterTitle = {
   Level: 'Уровень',
 } as const;
 
+export const VIDEOCAMERA_DISABLED_TYPES: CameraTypeValue[] = [CameraType.Snapshot, CameraType.Film];
 

@@ -39,7 +39,8 @@ const filterSlice = createSlice({
     },
     resetUnavailableTypes: (state: FilterState) => {
       state.types = state.types.filter((type) => !VIDEOCAMERA_DISABLED_TYPES.includes(type))
-    }
+    },
+    resetFilters: () => initialState,
   }
 })
 
@@ -47,6 +48,6 @@ export const getCategory = (state: State) => state.filter.category;
 export const getTypes = (state: State) => state.filter.types;
 export const getLevels = (state: State) => state.filter.levels;
 
-export const { setCategory, setTypes, setLevels, resetUnavailableTypes } = filterSlice.actions;
+export const { setCategory, setTypes, setLevels, resetUnavailableTypes, resetFilters } = filterSlice.actions;
 
 export default filterSlice;

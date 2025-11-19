@@ -1,3 +1,5 @@
+import { useAppDispatch } from "../../store/hooks/store.index";
+import { resetFilters } from "../../store/slices/filter-slice/filter-slice";
 import FilterBlock from "./filter/filter-block";
 import FilterCategory from "./filter/filter-category";
 import FilterLevels from "./filter/filter-levels";
@@ -5,8 +7,11 @@ import FilterTypes from "./filter/filter-types";
 import { FilterTitle } from "./form-filter.const";
 
 function FormFilter(): JSX.Element {
+  const dispatch = useAppDispatch();
 
   const { Category, Type, Level } = FilterTitle;
+
+  const handleButtonClick = () => dispatch(resetFilters());
 
   return (
     <div className="catalog-filter">
@@ -40,7 +45,8 @@ function FormFilter(): JSX.Element {
           <FilterLevels />
         </FilterBlock>
 
-        <button className="btn catalog-filter__reset-btn" type="reset">Сбросить фильтры
+        <button
+          className="btn catalog-filter__reset-btn" type="button" onClick={handleButtonClick}>Сбросить фильтры
         </button>
       </form>
     </div >

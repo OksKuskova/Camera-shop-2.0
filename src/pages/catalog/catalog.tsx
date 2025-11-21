@@ -9,16 +9,16 @@ import ProductCard from '../../components/product-card/product-card';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import FormSort from '../../components/form-sort/form-sort';
 import FormFilter from '../../components/form-filter/form-filter';
-import { useFilter } from '../../hooks/use-filter';
+import { useFilterByCategoryTypeLevel } from '../../hooks/use-filter';
 
 function Catalog(): JSX.Element {
   const { data, isLoading, isError, error, refetch } = useGetCamerasQuery();
 
   const result = resolveCatalogData(data, isError, error, refetch);
 
-  const filteredProducts = useFilter(result.type === 'success' ? result.products : [])
+  const productsByCategoryTypeLevel = useFilterByCategoryTypeLevel(result.type === 'success' ? result.products : [])
 
-  const { sort, handleSortChange, sortedProducts } = useCatalogSort(filteredProducts);
+  const { sort, handleSortChange, sortedProducts } = useCatalogSort(productsByCategoryTypeLevel);
 
   if (isLoading) {
     return <Loader />
@@ -36,7 +36,7 @@ function Catalog(): JSX.Element {
           <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
           <div className="page-content__columns">
             <div className="catalog__aside">
-              <FormFilter />
+              <FormFilter productsByCategoryTypeLevel={productsByCategoryTypeLevel} />
             </div>
             <div className="catalog__content">
               <FormSort sort={sort} onChange={handleSortChange} />

@@ -3,7 +3,7 @@ import { useAppSelector } from "../store/hooks/store.index";
 import { getCategory, getLevels, getTypes } from "../store/slices/filter-slice/filter-slice";
 import { Camera } from "../types/camera.types";
 
-export function useFilter(products: Camera[]): Camera[] {
+export function useFilterByCategoryTypeLevel(products: Camera[]): Camera[] {
   const category = useAppSelector(getCategory);
   const types = useAppSelector(getTypes);
   const levels = useAppSelector(getLevels);

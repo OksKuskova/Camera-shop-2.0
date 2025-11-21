@@ -1,6 +1,7 @@
 import { CameraCategory } from "../../constants/camera.const";
-import { CameraCategoryValue, CameraTypeValue } from "../../types/camera.types";
+import { Camera, CameraCategoryValue, CameraTypeValue } from "../../types/camera.types";
 import { CAMEL_TO_KEBAB, VIDEOCAMERA_DISABLED_TYPES } from "./form-filter.const";
+import { PriceRange } from "./form-filter.type";
 
 export const toKebabCase = (data: string) => data.replace(CAMEL_TO_KEBAB.regex, CAMEL_TO_KEBAB.replace).toLowerCase();
 
@@ -8,3 +9,14 @@ export const isTypeDisabled = (type: CameraTypeValue, currentCategory: CameraCat
   currentCategory === CameraCategory.Videocamera ? VIDEOCAMERA_DISABLED_TYPES.includes(type) : false
 )
 
+export const getPriceRange = (products: Camera[]): PriceRange => {
+  let min = Infinity;
+  let max = -Infinity;
+
+  for (const product of products) {
+    if (product.price < min) min = product.price;
+    if (product.price > max) max = product.price;
+  }
+
+  return { min, max };
+}

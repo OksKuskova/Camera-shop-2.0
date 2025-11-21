@@ -10,7 +10,13 @@ export const FilterTitle = {
   Category: 'Категория',
   Type: 'Тип камеры',
   Level: 'Уровень',
+  Price: 'Цена, ₽',
 } as const;
 
 export const VIDEOCAMERA_DISABLED_TYPES: CameraTypeValue[] = [CameraType.Snapshot, CameraType.Film];
+
+export const PriceHtmlName = {
+  Min: 'min',
+  Max: 'max',
+} as const;
 

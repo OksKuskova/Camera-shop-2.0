@@ -3,17 +3,21 @@ import { CameraCategoryValue, CameraTypeValue, CameraLevelValue } from "../../..
 import { SliceName } from "../slices.const";
 import { State } from "../../store.type";
 import { VIDEOCAMERA_DISABLED_TYPES } from "../../../components/form-filter/form-filter.const";
+import { PriceRange } from "../../../components/form-filter/form-filter.type";
+import { PricePayload } from "./filter-slice.type";
 
 type FilterState = {
   category: CameraCategoryValue | null,
   types: CameraTypeValue[],
   levels: CameraLevelValue[],
+  price: PriceRange,
 };
 
 const initialState: FilterState = {
   category: null,
   types: [],
   levels: [],
+  price: { min: null, max: null },
 };
 
 const filterSlice = createSlice({
@@ -37,6 +41,10 @@ const filterSlice = createSlice({
         state.levels.push(action.payload);
       }
     },
+    setPrice: (state: FilterState, action: PayloadAction<PricePayload>) => {
+      const { key, value } = action.payload;
+      state.price[key] = value;
+    },
     resetUnavailableTypes: (state: FilterState) => {
       state.types = state.types.filter((type) => !VIDEOCAMERA_DISABLED_TYPES.includes(type))
     },
@@ -47,7 +55,8 @@ const filterSlice = createSlice({
 export const getCategory = (state: State) => state.filter.category;
 export const getTypes = (state: State) => state.filter.types;
 export const getLevels = (state: State) => state.filter.levels;
+export const getUsersPriceRange = (state: State) => state.filter.price;
 
-export const { setCategory, setTypes, setLevels, resetUnavailableTypes, resetFilters } = filterSlice.actions;
+export const { setCategory, setTypes, setLevels, setPrice, resetUnavailableTypes, resetFilters } = filterSlice.actions;
 
 export default filterSlice;

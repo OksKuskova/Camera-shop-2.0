@@ -15,8 +15,14 @@ export const FilterTitle = {
 
 export const VIDEOCAMERA_DISABLED_TYPES: CameraTypeValue[] = [CameraType.Snapshot, CameraType.Film];
 
-export const PriceHtmlName = {
-  Min: 'min',
-  Max: 'max',
+export const PRICE_FIELDS = {
+  min: {
+    name: 'min',
+    placeholder: 'от',
+  },
+  max: {
+    name: 'max',
+    placeholder: 'до',
+  }
 } as const;
 

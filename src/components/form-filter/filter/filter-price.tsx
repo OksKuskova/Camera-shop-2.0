@@ -4,6 +4,7 @@ import { applyPriceRange, getPriceRange } from "../form-filter.utils";
 import { useAppDispatch } from "../../../store/hooks/store.index";
 import { setPrice } from "../../../store/slices/filter-slice/filter-slice";
 import { DIGITS_ONLY_REGEX, PRICE_FIELDS } from "../form-filter.const";
+import { useDebounce } from "../../../hooks/use-debounse";
 
 function FilterPrice({ productsByCategoryTypeLevel }: FilterPriceProps): JSX.Element {
   const dispatch = useAppDispatch();
@@ -17,15 +18,17 @@ function FilterPrice({ productsByCategoryTypeLevel }: FilterPriceProps): JSX.Ele
     max: '',
   })
 
+  const debounsedUserInput = useDebounce(userInput, 1500);
+
   useEffect(() => {
     const range = getPriceRange(productsByCategoryTypeLevel);
     setPriceLimits(range);
-
-    setUserInput((prev) => ({
-      min: prev.min && range.min !== null && Number(prev.min) < range.min ? String(range.min) : prev.min,
-      max: prev.max && range.max !== null && Number(prev.max) > range.max ? String(range.max) : prev.max,
-    }));
   }, [productsByCategoryTypeLevel]);
+
+  useEffect(() => {
+    const { correctMinPrice, correctMaxPrice } = applyPriceRange(debounsedUserInput, priceLimits);
+    dispatch(setPrice({ min: correctMinPrice, max: correctMaxPrice }));
+  }, [debounsedUserInput, priceLimits]);
 
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = evt.target;

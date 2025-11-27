@@ -1,6 +1,8 @@
 import { CameraType } from "../../constants/camera.const";
 import { CameraTypeValue } from "../../types/camera.types";
 
+export const DIGITS_ONLY_REGEX = /^\d+$/;
+
 export const CAMEL_TO_KEBAB = {
   regex: /([a-z])([A-Z])/g,
   replace: '$1-$2'

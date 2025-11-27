@@ -10,4 +10,9 @@ export type PriceRange = {
   max: number | null,
 };
 
+export type UserPrice = {
+  min: string,
+  max: string,
+}
+
 export type PriceRangeKey = keyof typeof PRICE_FIELDS;

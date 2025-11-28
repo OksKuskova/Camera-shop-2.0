@@ -22,7 +22,7 @@ function FilterCategory(): JSX.Element {
   return (
     <>
       {Object.entries(CameraCategory).map(([key, category]) => (
-        <FilterItemBase key={key} type='radio' name='category' label={category} value={key} checked={currentCategory === category} onChange={() => handleInputChange(category)} />))}
+        <FilterItemBase key={key} type='radio' name='category' label={category} value={key} checked={currentCategory === category} onToggle={() => handleInputChange(category)} />))}
     </>
   )
 }

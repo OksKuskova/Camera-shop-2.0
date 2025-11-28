@@ -18,7 +18,7 @@ function FilterTypes(): JSX.Element {
   return (
     <>
       {Object.entries(CameraType).map(([key, type]) => (
-        <FilterItemBase key={key} type='checkbox' label={type} name={key} checked={currentTypes.includes(type)} disabled={isTypeDisabled(type, currentCategory)} onChange={() => handleInputChange(type)} />
+        <FilterItemBase key={key} type='checkbox' label={type} name={key} checked={currentTypes.includes(type)} disabled={isTypeDisabled(type, currentCategory)} onToggle={() => handleInputChange(type)} />
       ))}
     </>
   )

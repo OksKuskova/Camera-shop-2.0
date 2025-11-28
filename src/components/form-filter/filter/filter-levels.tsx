@@ -5,21 +5,21 @@ import { CameraLevelValue } from "../../../types/camera.types";
 import FilterItemBase from "../filter-item/filter-item-base";
 
 function FilterLevels(): JSX.Element {
-	const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-	const currentLevels = useAppSelector(getLevels);
+  const currentLevels = useAppSelector(getLevels);
 
-	const handleInputChange = (level: CameraLevelValue) => {
-		dispatch(setLevels(level));
-	};
+  const handleInputChange = (level: CameraLevelValue) => {
+    dispatch(setLevels(level));
+  };
 
-	return (
-		<>
-			{Object.entries(CameraLevel).map(([key, level]) => (
-				<FilterItemBase key={key} type='checkbox' name={key} label={level} checked={currentLevels.includes(level)} onChange={() => handleInputChange(level)} />
-			))}
-		</>
-	)
+  return (
+    <>
+      {Object.entries(CameraLevel).map(([key, level]) => (
+        <FilterItemBase key={key} type='checkbox' name={key} label={level} checked={currentLevels.includes(level)} onToggle={() => handleInputChange(level)} />
+      ))}
+    </>
+  )
 }
 
 export default FilterLevels;

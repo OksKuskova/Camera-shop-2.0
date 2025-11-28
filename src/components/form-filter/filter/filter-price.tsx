@@ -1,10 +1,11 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState, KeyboardEvent } from "react";
 import { FilterPriceProps, PriceRange, UserPrice } from "../form-filter.type";
 import { adjustPriceRange, getPriceRange } from "../form-filter.utils";
 import { useAppDispatch } from "../../../store/hooks/store.index";
 import { setPrice } from "../../../store/slices/filter-slice/filter-slice";
 import { DIGITS_ONLY_REGEX, PRICE_FIELDS } from "../form-filter.const";
 import { useDebounce } from "../../../hooks/use-debounse";
+import { Keys } from "../../../constants/keyboard-keys.const";
 
 function FilterPrice({ productsByCategoryTypeLevel }: FilterPriceProps): JSX.Element {
   const dispatch = useAppDispatch();
@@ -52,6 +53,13 @@ function FilterPrice({ productsByCategoryTypeLevel }: FilterPriceProps): JSX.Ele
     applyAndSyncPriceRange();
   };
 
+  const handleKeyDown = (evt: KeyboardEvent<HTMLInputElement>) => {
+    if (evt.key === Keys.ENTER) {
+      evt.preventDefault();
+      applyAndSyncPriceRange();
+    }
+  };
+
   return (
     <div className="catalog-filter__price-range">
       {Object.values(PRICE_FIELDS).map(({ name, placeholder }) => (
@@ -64,6 +72,7 @@ function FilterPrice({ productsByCategoryTypeLevel }: FilterPriceProps): JSX.Ele
               placeholder={priceLimits[name] !== null ? String(priceLimits[name]) : placeholder}
               onChange={handleInputChange}
               onBlur={handleInputBlur}
+              onKeyDown={handleKeyDown}
             />
           </label>
         </div>

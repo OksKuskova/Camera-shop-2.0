@@ -3,7 +3,7 @@ import { FilterPriceProps, PriceRange, UserPrice } from "../form-filter.type";
 import { adjustPriceRange, getPriceRange } from "../form-filter.utils";
 import { useAppDispatch } from "../../../store/hooks/store.index";
 import { setPrice } from "../../../store/slices/filter-slice/filter-slice";
-import { DIGITS_ONLY_REGEX, PRICE_FIELDS } from "../form-filter.const";
+import { DIGITS_ONLY_REGEX, PRICE_FIELDS, PRICE_INPUT_DEBOUNCE_DELAY } from "../form-filter.const";
 import { useDebounce } from "../../../hooks/use-debounse";
 import { Keys } from "../../../constants/keyboard-keys.const";
 
@@ -19,7 +19,7 @@ function FilterPrice({ productsByCategoryTypeLevel }: FilterPriceProps): JSX.Ele
     max: '',
   })
 
-  const debounsedUserInput = useDebounce(userInput, 1500);
+  const debounsedUserInput = useDebounce(userInput, PRICE_INPUT_DEBOUNCE_DELAY);
 
   useEffect(() => {
     const range = getPriceRange(productsByCategoryTypeLevel);

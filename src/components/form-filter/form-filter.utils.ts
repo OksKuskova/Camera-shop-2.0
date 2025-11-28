@@ -25,24 +25,24 @@ export const getPriceRange = (products: Camera[]) => {
   return { min, max };
 };
 
-export const applyPriceRange = (userInput: UserPrice, priceLimits: PriceRange) => {
+export const adjustPriceRange = (userInput: UserPrice, priceLimits: PriceRange) => {
   const inputMin = userInput.min === '' ? null : Number(userInput.min);
   const inputMax = userInput.max === '' ? null : Number(userInput.max);
 
-  const correctMinPrice = (() => {
+  const min = (() => {
     if (inputMin === null) return null;
     if (priceLimits.min === null) return inputMin;
 
     return Math.max(priceLimits.min, inputMin);
   })();
 
-  const correctMaxPrice = (() => {
+  const max = (() => {
     if (inputMax === null) return null;
-    if (inputMin !== null && inputMax < inputMin) return correctMinPrice;
+    if (inputMin !== null && inputMax < inputMin) return min;
     if (priceLimits.max === null) return inputMax;
 
     return Math.min(priceLimits.max, inputMax);
   })();
 
-  return { correctMinPrice, correctMaxPrice };
+  return { min, max };
 }

@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { FilterPriceProps, PriceRange, UserPrice } from "../form-filter.type";
-import { applyPriceRange, getPriceRange } from "../form-filter.utils";
+import { adjustPriceRange, getPriceRange } from "../form-filter.utils";
 import { useAppDispatch } from "../../../store/hooks/store.index";
 import { setPrice } from "../../../store/slices/filter-slice/filter-slice";
 import { DIGITS_ONLY_REGEX, PRICE_FIELDS } from "../form-filter.const";
@@ -26,9 +26,20 @@ function FilterPrice({ productsByCategoryTypeLevel }: FilterPriceProps): JSX.Ele
   }, [productsByCategoryTypeLevel]);
 
   useEffect(() => {
-    const { correctMinPrice, correctMaxPrice } = applyPriceRange(debounsedUserInput, priceLimits);
-    dispatch(setPrice({ min: correctMinPrice, max: correctMaxPrice }));
+    const { min, max } = adjustPriceRange(debounsedUserInput, priceLimits);
+    dispatch(setPrice({ min, max }));
   }, [debounsedUserInput, priceLimits]);
+
+  const applyAndSyncPriceRange = () => {
+    const { min, max } = adjustPriceRange(userInput, priceLimits);
+
+    dispatch(setPrice({ min, max }));
+
+    setUserInput({
+      min: min === null ? '' : String(min),
+      max: max === null ? '' : String(max),
+    });
+  }
 
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = evt.target;
@@ -38,15 +49,8 @@ function FilterPrice({ productsByCategoryTypeLevel }: FilterPriceProps): JSX.Ele
   };
 
   const handleInputBlur = () => {
-    const { correctMinPrice, correctMaxPrice } = applyPriceRange(userInput, priceLimits);
-
-    dispatch(setPrice({ min: correctMinPrice, max: correctMaxPrice }));
-
-    setUserInput({
-      min: correctMinPrice === null ? '' : String(correctMinPrice),
-      max: correctMaxPrice === null ? '' : String(correctMaxPrice)
-    });
-  }
+    applyAndSyncPriceRange();
+  };
 
   return (
     <div className="catalog-filter__price-range">

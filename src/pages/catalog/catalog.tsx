@@ -2,6 +2,8 @@ import { useGetCamerasQuery } from '../../store/api/api';
 import { Camera } from '../../types/camera.types';
 import { resolveCatalogData, sourceToFallbackProps } from '../../components/fallback-state/fallback-state.utils';
 import { useCatalogSort } from '../../hooks/use-catalog-sort';
+import { useFilterByCategoryTypeLevel } from '../../hooks/use-filter-by-category-type-level';
+import { useFilterByPrice } from '../../hooks/use-filter-by-price';
 
 import FallbackState from '../../components/fallback-state/fallback-state';
 import Loader from '../../components/loader/loader';
@@ -9,7 +11,6 @@ import ProductCard from '../../components/product-card/product-card';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import FormSort from '../../components/form-sort/form-sort';
 import FormFilter from '../../components/form-filter/form-filter';
-import { useFilterByCategoryTypeLevel } from '../../hooks/use-filter';
 
 function Catalog(): JSX.Element {
   const { data, isLoading, isError, error, refetch } = useGetCamerasQuery();
@@ -17,8 +18,9 @@ function Catalog(): JSX.Element {
   const result = resolveCatalogData(data, isError, error, refetch);
 
   const productsByCategoryTypeLevel = useFilterByCategoryTypeLevel(result.type === 'success' ? result.products : [])
+  const filteredProducts = useFilterByPrice(productsByCategoryTypeLevel);
 
-  const { sort, handleSortChange, sortedProducts } = useCatalogSort(productsByCategoryTypeLevel);
+  const { sort, handleSortChange, sortedProducts } = useCatalogSort(filteredProducts);
 
   if (isLoading) {
     return <Loader />

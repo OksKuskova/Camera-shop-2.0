@@ -11,8 +11,13 @@ import ProductCard from '../../components/product-card/product-card';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import FormSort from '../../components/form-sort/form-sort';
 import FormFilter from '../../components/form-filter/form-filter';
+import Pagination from '../../components/pagination/pagination';
+import { useState } from 'react';
+import { CARDS_PER_PAGE, DEFAULT_START_PAGE_NUMBER } from '../../components/pagination/pagination.const';
 
 function Catalog(): JSX.Element {
+  const [currentPage, setCurrentPage] = useState<number>(DEFAULT_START_PAGE_NUMBER);
+
   const { data, isLoading, isError, error, refetch } = useGetCamerasQuery();
 
   const result = resolveCatalogData(data, isError, error, refetch);
@@ -30,6 +35,14 @@ function Catalog(): JSX.Element {
     return <FallbackState {...sourceToFallbackProps(result.source)} />
   }
 
+  const totalPages = Math.ceil(sortedProducts.length / CARDS_PER_PAGE);
+  const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
+  const cards = sortedProducts.slice(startIndex, startIndex + CARDS_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  }
+
   return (
     <div className="page-content">
       <Breadcrumbs />
@@ -44,21 +57,10 @@ function Catalog(): JSX.Element {
               <FormSort sort={sort} onChange={handleSortChange} />
               <div className="cards catalog__cards">
                 {
-                  sortedProducts.map((product: Camera) => <ProductCard key={product.id} product={product} />)
+                  cards.map((product: Camera) => <ProductCard key={product.id} product={product} />)
                 }
               </div>
-              {/* <div className="pagination">
-                  <ul className="pagination__list">
-                    <li className="pagination__item"><a className="pagination__link pagination__link&#45;&#45;active" href="1">1</a>
-                    </li>
-                    <li className="pagination__item"><a className="pagination__link" href="2">2</a>
-                    </li>
-                    <li className="pagination__item"><a className="pagination__link" href="3">3</a>
-                    </li>
-                    <li className="pagination__item"><a className="pagination__link pagination__link&#45;&#45;text" href="2">Далее</a>
-                    </li>
-                  </ul>
-                </div> */}
+              {totalPages > 1 && <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />}
             </div>
           </div>
         </div>

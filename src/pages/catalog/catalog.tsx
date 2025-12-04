@@ -4,6 +4,7 @@ import { resolveCatalogData, sourceToFallbackProps } from '../../components/fall
 import { useCatalogSort } from '../../hooks/use-catalog-sort';
 import { useFilterByCategoryTypeLevel } from '../../hooks/use-filter-by-category-type-level';
 import { useFilterByPrice } from '../../hooks/use-filter-by-price';
+import { usePagination } from '../../hooks/use-pagination';
 
 import FallbackState from '../../components/fallback-state/fallback-state';
 import Loader from '../../components/loader/loader';
@@ -12,12 +13,8 @@ import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import FormSort from '../../components/form-sort/form-sort';
 import FormFilter from '../../components/form-filter/form-filter';
 import Pagination from '../../components/pagination/pagination';
-import { useState } from 'react';
-import { CARDS_PER_PAGE, DEFAULT_START_PAGE_NUMBER } from '../../components/pagination/pagination.const';
 
 function Catalog(): JSX.Element {
-  const [currentPage, setCurrentPage] = useState<number>(DEFAULT_START_PAGE_NUMBER);
-
   const { data, isLoading, isError, error, refetch } = useGetCamerasQuery();
 
   const result = resolveCatalogData(data, isError, error, refetch);
@@ -27,20 +24,14 @@ function Catalog(): JSX.Element {
 
   const { sort, handleSortChange, sortedProducts } = useCatalogSort(filteredProducts);
 
+  const { currentPage, totalPages, cards, handlePageChange } = usePagination(sortedProducts);
+
   if (isLoading) {
     return <Loader />
   }
 
   if (result.type === 'fallback') {
     return <FallbackState {...sourceToFallbackProps(result.source)} />
-  }
-
-  const totalPages = Math.ceil(sortedProducts.length / CARDS_PER_PAGE);
-  const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
-  const cards = sortedProducts.slice(startIndex, startIndex + CARDS_PER_PAGE);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
   }
 
   return (

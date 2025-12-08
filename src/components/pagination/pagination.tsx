@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import './pagination.style.css';
 import { getPaginationItems } from "./pagination.utils";
 import { PaginationItem } from "./pagination.type";
 import { DEFAULT_START_PAGE_NUMBER, PaginationLabel } from "./pagination.const";
@@ -34,11 +34,12 @@ function Pagination({ totalPages, currentPage, onPageChange }: PaginationProps):
           }
 
           return (<li key={item} className="pagination__item">
-            <Link className={`pagination__link ${extraClassName}`}
-              to=''
+            <button
+              className={`pagination__link ${extraClassName}`}
+              type="button"
               onClick={() => handleClick(item)}
             >{item}
-            </Link>
+            </button>
           </li>)
         })}
       </ul>

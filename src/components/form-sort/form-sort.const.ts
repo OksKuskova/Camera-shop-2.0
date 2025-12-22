@@ -1,3 +1,8 @@
+export const SORT_NAMES = {
+  Type: 'sortType',
+  Order: 'sortOrder',
+} as const;
+
 export const SortType = {
   Price: 'price',
   Rating: 'rating',

@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import { SORT_LABELS, SortOrder, SortType } from "./form-sort.const";
+import { SORT_LABELS, SORT_NAMES, SortOrder, SortType } from "./form-sort.const";
 import { Sort } from "./form-sort.type";
 
 type FormSortProps = {
@@ -22,7 +22,7 @@ function FormSort({ onChange, sort }: FormSortProps): JSX.Element {
           <div className="catalog-sort__type">
             {Object.values(SortType).map((value) => (
               <div className="catalog-sort__btn-text" key={value}>
-                <input type="radio" id={value} name='type' onChange={handleSortChange} checked={type === value}></input>
+                <input type="radio" id={value} name={SORT_NAMES.Type} onChange={handleSortChange} checked={type === value}></input>
                 <label htmlFor={value}>{SORT_LABELS[value]}</label>
               </div>
             ))}
@@ -30,7 +30,7 @@ function FormSort({ onChange, sort }: FormSortProps): JSX.Element {
           <div className="catalog-sort__order">
             {Object.values(SortOrder).map((value) => (
               <div className={`catalog-sort__btn catalog-sort__btn--${value}`} key={value}>
-                <input type="radio" id={value} name='order' aria-label={SORT_LABELS[value]} onChange={handleSortChange} checked={order === value}></input>
+                <input type="radio" id={value} name={SORT_NAMES.Order} aria-label={SORT_LABELS[value]} onChange={handleSortChange} checked={order === value}></input>
                 <label htmlFor={value}>
                   <svg width="16" height="14" aria-hidden="true">
                     <use xlinkHref="#icon-sort"></use>

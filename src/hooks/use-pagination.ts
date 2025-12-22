@@ -5,51 +5,48 @@ import { useSearchParams } from "react-router-dom";
 
 export function usePagination(products: Camera[]) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [currentPage, setCurrentPage] = useState<number>(DEFAULT_START_PAGE_NUMBER)
+  const [currentPage, setCurrentPage] = useState<number>(DEFAULT_START_PAGE_NUMBER);
 
-  const totalPages = Math.ceil(products.length / CARDS_PER_PAGE);
+  const totalPages = Math.ceil(products.length / CARDS_PER_PAGE) || 1;
 
   const updateUrl = (page: number) => {
-    const newParams = new URLSearchParams(searchParams);
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
 
-    if (page === DEFAULT_START_PAGE_NUMBER) {
-      newParams.delete('page');
-    } else {
-      newParams.set('page', String(page));
-    }
-    setSearchParams(newParams, { replace: true });
+      if (page === DEFAULT_START_PAGE_NUMBER) {
+        newParams.delete('page');
+      } else {
+        newParams.set('page', String(page));
+      }
+
+      return newParams;
+    }, { replace: true })
   };
 
   useEffect(() => {
-    const pageFromUrl = Number(searchParams.get('page'));
+    const pageParam = searchParams.get('page');
+    const pageFromUrl = pageParam ? Number(pageParam) : DEFAULT_START_PAGE_NUMBER;
 
-    if (!pageFromUrl) {
+    if (!Number.isInteger(pageFromUrl) || pageFromUrl < 1) {
       setCurrentPage(DEFAULT_START_PAGE_NUMBER);
-    }
-
-    if (pageFromUrl < 1 || !Number.isFinite(pageFromUrl)) {
-      setCurrentPage(DEFAULT_START_PAGE_NUMBER);
+      updateUrl(DEFAULT_START_PAGE_NUMBER);
     } else {
       setCurrentPage(pageFromUrl);
+      updateUrl(pageFromUrl);
     }
   }, [searchParams]);
 
   useEffect(() => {
-    if (totalPages === 0) return;
+    if (products.length === 0) return;
 
-    let validPage = currentPage;
+    const validatedPage = currentPage > totalPages ? totalPages : currentPage;
 
-    if (currentPage < 1) {
-      validPage = DEFAULT_START_PAGE_NUMBER;
-    } else if (currentPage > totalPages) {
-      validPage = totalPages;
+    if (validatedPage !== currentPage) {
+      setCurrentPage(validatedPage);
+      updateUrl(validatedPage);
     }
 
-    if (validPage !== currentPage) {
-      setCurrentPage(validPage);
-      updateUrl(validPage);
-    }
-  }, [totalPages, currentPage]);
+  }, [totalPages]);
 
   const startIndex = (currentPage - 1) * CARDS_PER_PAGE;
   const cards = products.slice(startIndex, startIndex + CARDS_PER_PAGE);

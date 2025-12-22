@@ -13,8 +13,11 @@ import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import FormSort from '../../components/form-sort/form-sort';
 import FormFilter from '../../components/form-filter/form-filter';
 import Pagination from '../../components/pagination/pagination';
+import { useFiltersUrlSync } from '../../hooks/use-filters-url-sync';
 
 function Catalog(): JSX.Element {
+  useFiltersUrlSync();
+
   const { data, isLoading, isError, error, refetch } = useGetCamerasQuery();
 
   const result = resolveCatalogData(data, isError, error, refetch);

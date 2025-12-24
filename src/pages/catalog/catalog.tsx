@@ -27,7 +27,7 @@ function Catalog(): JSX.Element {
 
   const { sort, handleSortChange, sortedProducts } = useCatalogSort(filteredProducts);
 
-  const { currentPage, totalPages, cards, handlePageChange } = usePagination(sortedProducts);
+  const { shouldShowPagination, displayedCards } = usePagination(sortedProducts);
 
   if (isLoading) {
     return <Loader />
@@ -51,10 +51,10 @@ function Catalog(): JSX.Element {
               <FormSort sort={sort} onChange={handleSortChange} />
               <div className="cards catalog__cards">
                 {
-                  cards.map((product: Camera) => <ProductCard key={product.id} product={product} />)
+                  displayedCards.map((product: Camera) => <ProductCard key={product.id} product={product} />)
                 }
               </div>
-              {totalPages > 1 && <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={handlePageChange} />}
+              {shouldShowPagination && <Pagination />}
             </div>
           </div>
         </div>

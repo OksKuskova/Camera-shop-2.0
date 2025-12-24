@@ -2,17 +2,21 @@ import './pagination.style.css';
 import { getPaginationItems } from "./pagination.utils";
 import { PaginationItem } from "./pagination.type";
 import { DEFAULT_START_PAGE_NUMBER, PaginationLabel } from "./pagination.const";
+import { getCurrentPage, getTotalPages, setCurrentPage } from '../../store/slices/pagination-slice/pagination.slice';
+import { useAppDispatch, useAppSelector, } from '../../store/hooks/store.index';
 
-type PaginationProps = {
-  totalPages: number,
-  currentPage: number,
-  onPageChange: (page: number) => void,
-}
+function Pagination(): JSX.Element | null {
+  const dispatch = useAppDispatch();
 
-function Pagination({ totalPages, currentPage, onPageChange }: PaginationProps): JSX.Element {
+  const currentPage = useAppSelector(getCurrentPage);
+  const totalPages = useAppSelector(getTotalPages);
+
+  if (!totalPages) return null;
 
   const items = getPaginationItems(totalPages, currentPage);
+
   const numericItems = items.filter((item) => typeof item === 'number');
+
   const firstShowedItem = numericItems.length ? numericItems[0] : DEFAULT_START_PAGE_NUMBER;
   const lastShowedItem = numericItems.length ? numericItems[numericItems.length - 1] : DEFAULT_START_PAGE_NUMBER;
 
@@ -23,14 +27,14 @@ function Pagination({ totalPages, currentPage, onPageChange }: PaginationProps):
           const extraClassName = typeof item === 'number' ? currentPage === item ? 'pagination__link--active' : '' : 'pagination__link--text';
           const handleClick = (item: PaginationItem) => {
             if (item === PaginationLabel.next) {
-              onPageChange(lastShowedItem + 1);
+              dispatch(setCurrentPage(lastShowedItem + 1));
               return;
             }
             if (item === PaginationLabel.prev) {
-              onPageChange(firstShowedItem - 1);
+              dispatch(setCurrentPage(firstShowedItem - 1));
               return;
             }
-            return onPageChange(item);
+            return dispatch(setCurrentPage(item));
           }
 
           return (<li key={item} className="pagination__item">

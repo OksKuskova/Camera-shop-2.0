@@ -1,10 +1,13 @@
 
 import { useMemo } from "react";
-import { useAppSelector } from "../store/hooks/store.index";
+import { useAppDispatch, useAppSelector } from "../store/hooks/store.index";
 import { getUsersPriceRange } from "../store/slices/filter-slice/filter-slice";
 import { Camera } from "../types/camera.types";
+import { setTotalPages } from "../store/slices/pagination-slice/pagination.slice";
 
 export function useFilterByPrice(availableProducts: Camera[]) {
+  const dispatch = useAppDispatch();
+
   const { min, max } = useAppSelector(getUsersPriceRange);
 
   const filteredProducts = useMemo(() => availableProducts.filter(({ price }) => {
@@ -13,6 +16,10 @@ export function useFilterByPrice(availableProducts: Camera[]) {
 
     return isMinOk && isMaxOk;
   }), [availableProducts, min, max]);
+
+  if (filteredProducts.length > 0) {
+    dispatch(setTotalPages(filteredProducts.length));
+  }
 
   return filteredProducts;
 }
